@@ -1,12 +1,12 @@
 package com.epam.rd.java.basic.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Builder
+@SuperBuilder
 public class User extends BaseEntity {
 
     private String login;

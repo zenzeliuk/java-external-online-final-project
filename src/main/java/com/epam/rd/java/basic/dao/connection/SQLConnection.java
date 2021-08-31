@@ -16,6 +16,7 @@ public class SQLConnection implements DBConnection {
             connection = DBConnectionPool.getConnection();
         } catch (SQLException e) {
             log.error("Cannot get connection from connection pool. " + e.getMessage());
+
         }
     }
 

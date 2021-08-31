@@ -11,7 +11,8 @@ import java.math.BigInteger;
 @Builder
 public class UserDetails extends BaseEntity {
 
-    private int userId;
+    private User user;
+//    private int userId;
     private String firstName;
     private String lastName;
     private String email;
