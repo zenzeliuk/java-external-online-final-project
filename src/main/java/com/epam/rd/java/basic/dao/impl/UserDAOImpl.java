@@ -1,6 +1,8 @@
 package com.epam.rd.java.basic.dao.impl;
 
 import com.epam.rd.java.basic.dao.UserDAO;
+import com.epam.rd.java.basic.dao.util.CloseResources;
+import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.model.Role;
 import com.epam.rd.java.basic.model.User;
@@ -14,9 +16,11 @@ import java.util.List;
 public class UserDAOImpl implements UserDAO {
 
     private final Connection connection;
+    private final CloseResources close;
 
     public UserDAOImpl(Connection connection) {
         this.connection = connection;
+        close = new CloseResourcesImpl();
     }
 
     @Override
@@ -36,8 +40,8 @@ public class UserDAOImpl implements UserDAO {
             log.error(exception);
             throw new DaoException(exception);
         } finally {
-            closeResultSet(resultSet);
-            closePrepareStatement(preparedStatement);
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
         }
         return userList;
     }
@@ -46,15 +50,13 @@ public class UserDAOImpl implements UserDAO {
         Role role = Role.createRole(
                 resultSet.getString("role_id"),
                 resultSet.getInt("role_id"));
-        User user = User
+        return User
                 .builder()
                 .id(resultSet.getInt("id"))
                 .login(resultSet.getString("login"))
                 .password(resultSet.getString("password"))
                 .role(role)
                 .build();
-        user.setRole(role);
-        return user;
     }
 
     @Override
@@ -79,8 +81,8 @@ public class UserDAOImpl implements UserDAO {
             log.error(exception);
             throw new DaoException(exception);
         } finally {
-            closeResultSet(resultSet);
-            closePrepareStatement(preparedStatement);
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
         }
     }
 
@@ -100,8 +102,8 @@ public class UserDAOImpl implements UserDAO {
             log.error(exception);
             throw new DaoException(exception);
         } finally {
-            closeResultSet(resultSet);
-            closePrepareStatement(preparedStatement);
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
         }
         return user;
     }
@@ -121,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
             log.error(exception);
             throw new DaoException(exception);
         } finally {
-            closePrepareStatement(preparedStatement);
+            close.closePrepareStatement(preparedStatement);
         }
     }
 
@@ -138,27 +140,7 @@ public class UserDAOImpl implements UserDAO {
             log.error(exception);
             throw new DaoException(exception);
         } finally {
-            closePrepareStatement(preparedStatement);
-        }
-    }
-
-    private void closePrepareStatement(PreparedStatement preparedStatement) {
-        try {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void closeResultSet(ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            log.error(e.getMessage());
+            close.closePrepareStatement(preparedStatement);
         }
     }
 

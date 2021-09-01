@@ -12,11 +12,38 @@ public class Category extends BaseEntity implements Serializable {
     public Category() {
     }
 
-    public Category(int id, String name, String description, Category parentCategory) {
-        super(id);
-        this.name = name;
-        this.description = description;
-        this.parentCategory = parentCategory;
+    public static Builder builder() {
+        return new Category().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+        }
+
+        public Builder id(int id) {
+            Category.this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            Category.this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            Category.this.description = description;
+            return this;
+        }
+
+        public Builder parentCategory(Category parentCategory) {
+            Category.this.parentCategory = parentCategory;
+            return this;
+        }
+
+        public Category build() {
+            return Category.this;
+        }
+
     }
 
     public String getName() {

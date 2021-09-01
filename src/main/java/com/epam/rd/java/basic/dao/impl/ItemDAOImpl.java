@@ -2,6 +2,7 @@ package com.epam.rd.java.basic.dao.impl;
 
 import com.epam.rd.java.basic.dao.ItemDAO;
 import com.epam.rd.java.basic.exception.DaoException;
+import com.epam.rd.java.basic.model.Category;
 import com.epam.rd.java.basic.model.Item;
 import lombok.extern.log4j.Log4j2;
 
@@ -44,10 +45,21 @@ public class ItemDAOImpl implements ItemDAO {
         return itemList;
     }
 
-    private Item getItemFromResultSet(ResultSet resultSet) {
-        Item item = Item.builder()
+    private Item getItemFromResultSet(ResultSet resultSet) throws SQLException {
+        Category category = Category.builder()
+                .id(resultSet.getInt("id"))
+                .name(resultSet.getString("category"))
+                .description(resultSet.getString("description"))
                 .build();
-        return null;
+        return Item
+                .builder()
+                .id(resultSet.getInt("item_id"))
+                .name(resultSet.getString("item_name"))
+                .code(resultSet.getString("item_code"))
+                .price(resultSet.getBigDecimal("item_price"))
+                .description(resultSet.getString("item_description"))
+                .category(category)
+                .build();
     }
 
     @Override
