@@ -1,5 +1,6 @@
-package com.epam.rd.java.basic.dao.connection;
+package com.epam.rd.java.basic.dao.impl.mysql;
 
+import com.epam.rd.java.basic.dao.DBConnection;
 import com.epam.rd.java.basic.util.DBConnectionPool;
 import lombok.extern.log4j.Log4j2;
 
@@ -7,11 +8,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Log4j2
-public class SQLConnection implements DBConnection {
+public class ConnectionImpl implements DBConnection {
 
     private Connection connection;
 
-    public SQLConnection() {
+    public ConnectionImpl() {
         try {
             connection = DBConnectionPool.getConnection();
         } catch (SQLException e) {
@@ -70,7 +71,7 @@ public class SQLConnection implements DBConnection {
     }
 
     private boolean isNotNull() {
-        return this.connection != null;
+        return connection != null;
     }
 
 }

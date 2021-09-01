@@ -2,13 +2,13 @@ package com.epam.rd.java.basic.dao.impl.mysql;
 
 import com.epam.rd.java.basic.dao.DAOFactory;
 import com.epam.rd.java.basic.dao.UserDAO;
-import com.epam.rd.java.basic.dao.connection.DBConnection;
+import com.epam.rd.java.basic.dao.DBConnection;
 
 
-public class MysqlDAOFactory implements DAOFactory {
+public class DAOFactoryImpl implements DAOFactory {
 
     @Override
     public UserDAO getUserDAO(DBConnection connection) {
-        return new MysqlUserDAO(connection.getConnection());
+        return new UserDAOImpl(connection.getConnection());
     }
 }
