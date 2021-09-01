@@ -1,7 +1,7 @@
-package com.epam.rd.java.basic.dao.impl.mysql;
+package com.epam.rd.java.basic.dao.impl;
 
 import com.epam.rd.java.basic.dao.UserDAO;
-import com.epam.rd.java.basic.exception.CannotExecuteQueryToDBException;
+import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.model.Role;
 import com.epam.rd.java.basic.model.User;
 import lombok.extern.log4j.Log4j2;
@@ -13,14 +13,14 @@ import java.util.List;
 @Log4j2
 public class UserDAOImpl implements UserDAO {
 
-    private Connection connection;
+    private final Connection connection;
 
     public UserDAOImpl(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public List<User> findAll() throws CannotExecuteQueryToDBException {
+    public List<User> findAll() throws DaoException {
         List<User> userList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -32,9 +32,9 @@ public class UserDAOImpl implements UserDAO {
                 userList.add(user);
             }
         } catch (SQLException e) {
-            String exception = "Cannot find all user. ";
-            log.error(exception + e.getMessage());
-            throw new CannotExecuteQueryToDBException(exception);
+            String exception = "Cannot find all user. " + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
         } finally {
             closeResultSet(resultSet);
             closePrepareStatement(preparedStatement);
@@ -46,16 +46,19 @@ public class UserDAOImpl implements UserDAO {
         Role role = Role.createRole(
                 resultSet.getString("role_id"),
                 resultSet.getInt("role_id"));
-        return User.builder()
+        User user = User
+                .builder()
                 .id(resultSet.getInt("id"))
                 .login(resultSet.getString("login"))
                 .password(resultSet.getString("password"))
                 .role(role)
                 .build();
+        user.setRole(role);
+        return user;
     }
 
     @Override
-    public int create(User user) throws CannotExecuteQueryToDBException {
+    public int create(User user) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
@@ -69,12 +72,12 @@ public class UserDAOImpl implements UserDAO {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else {
-                throw new CannotExecuteQueryToDBException("Cannot get generated id. ");
+                throw new DaoException("Cannot get generated id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create user. " + user.toString();
-            log.error(exception + e.getMessage());
-            throw new CannotExecuteQueryToDBException(exception);
+            String exception = "Cannot create user. " + user.toString() + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
         } finally {
             closeResultSet(resultSet);
             closePrepareStatement(preparedStatement);
@@ -82,7 +85,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User get(int id) throws CannotExecuteQueryToDBException {
+    public User get(int id) throws DaoException {
         User user;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -93,9 +96,9 @@ public class UserDAOImpl implements UserDAO {
             resultSet.next();
             user = getUserFromResultSet(resultSet);
         } catch (SQLException e) {
-            String exception = String.format("Cannot get user by id = '%s'. ", id);
-            log.error(exception + e.getMessage());
-            throw new CannotExecuteQueryToDBException(exception);
+            String exception = String.format("Cannot get user by id = '%s'. %s", id, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
         } finally {
             closeResultSet(resultSet);
             closePrepareStatement(preparedStatement);
@@ -104,7 +107,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean update(User user) throws CannotExecuteQueryToDBException {
+    public boolean update(User user) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_UPDATE_USER);
@@ -114,9 +117,9 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(4, user.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = "Cannot update user. " + user.toString();
-            log.error(exception + e.getMessage());
-            throw new CannotExecuteQueryToDBException(exception);
+            String exception = "Cannot update user. " + user.toString() + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
         } finally {
             closePrepareStatement(preparedStatement);
         }
@@ -124,16 +127,16 @@ public class UserDAOImpl implements UserDAO {
 
 
     @Override
-    public boolean delete(int id) throws CannotExecuteQueryToDBException {
+    public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_DELETE_USER_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = String.format("Cannot delete user by id = '%s'. ", id);
-            log.error(exception + e.getMessage());
-            throw new CannotExecuteQueryToDBException(exception);
+            String exception = String.format("Cannot delete user by id = '%s'. %s", id, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
         } finally {
             closePrepareStatement(preparedStatement);
         }

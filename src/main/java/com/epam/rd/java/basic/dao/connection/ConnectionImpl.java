@@ -1,6 +1,5 @@
-package com.epam.rd.java.basic.dao.impl.mysql;
+package com.epam.rd.java.basic.dao.connection;
 
-import com.epam.rd.java.basic.dao.DBConnection;
 import com.epam.rd.java.basic.util.DBConnectionPool;
 import lombok.extern.log4j.Log4j2;
 

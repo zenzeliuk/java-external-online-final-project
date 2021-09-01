@@ -1,4 +1,4 @@
-package com.epam.rd.java.basic.dao;
+package com.epam.rd.java.basic.dao.connection;
 
 import java.sql.Connection;
 

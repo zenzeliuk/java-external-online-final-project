@@ -1,18 +1,46 @@
 package com.epam.rd.java.basic.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.io.Serializable;
 
-@Getter
-@RequiredArgsConstructor
-public enum Role {
+public enum Role implements Serializable {
 
     ADMIN("admin"),
     USER("user"),
     UNREGISTERED("unregistered");
 
     private int id;
-    private final String name;
+    private String name;
+
+    Role() {
+    }
+
+    Role(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 
     public static Role createRole(String name, int id) {
         Role role = UNREGISTERED;
@@ -27,4 +55,5 @@ public enum Role {
         role.id = id;
         return role;
     }
+
 }

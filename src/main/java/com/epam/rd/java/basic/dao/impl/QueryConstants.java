@@ -1,9 +1,8 @@
-package com.epam.rd.java.basic.dao.impl.mysql;
+package com.epam.rd.java.basic.dao.impl;
 
 public class QueryConstants {
 
     private QueryConstants() {
-        //private constructor. Class is util
     }
 
     public static class USER {
@@ -11,7 +10,7 @@ public class QueryConstants {
                 "SELECT " +
                 "       user.id       AS id, " +
                 "       user.login    AS login, " +
-                "       user.password AS pass, " +
+                "       user.password AS password, " +
                 "       role.id       AS role_id, " +
                 "       role.name     AS name " +
                 "FROM shop.user AS user " +
@@ -24,7 +23,7 @@ public class QueryConstants {
                 "SELECT " +
                 "       user.id       AS id, " +
                 "       user.login    AS login, " +
-                "       user.password AS pass, " +
+                "       user.password AS password, " +
                 "       role.id       AS role_id, " +
                 "       role.name     AS name " +
                 "FROM shop.user AS user " +
@@ -41,5 +40,20 @@ public class QueryConstants {
                 "FROM user " +
                 "WHERE id = ?";
     }
+
+    public static class ITEM {
+        public static final String SQL_FIND_ALL_ITEMS = "";
+        public static final String SQL_CREATE_ITEM = "";
+        public static final String SQL_GET_ITEM_BY_ID = "";
+        public static final String SQL_UPDATE_ITEM = "";
+        public static final String SQL_DELETE_ITEM_BY_ID = "";
+    }
+//    public static class ITEM {
+//        public static final String SQL_FIND_ALL_ITEMS = "";
+//        public static final String SQL_CREATE_ITEM = "";
+//        public static final String SQL_GET_ITEM_BY_ID = "";
+//        public static final String SQL_UPDATE_ITEM = "";
+//        public static final String SQL_DELETE_ITEM_BY_ID = "";
+//    }
 
 }

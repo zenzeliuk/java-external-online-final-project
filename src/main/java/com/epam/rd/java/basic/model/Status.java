@@ -1,16 +1,44 @@
 package com.epam.rd.java.basic.model;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.io.Serializable;
 
-@Getter
-@RequiredArgsConstructor
-public enum Status {
+public enum Status implements Serializable {
 
     REGISTERED("registered"),
     PAID("paid"),
     CANCELED("canceled");
 
-    private final String name;
+    private int id;
+    private String name;
 
+    Status() {
+    }
+
+    Status(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Status{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
