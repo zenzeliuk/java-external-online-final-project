@@ -2,18 +2,15 @@ package com.epam.rd.java.basic.model;
 
 import java.io.Serializable;
 
-public enum Status implements Serializable {
+public enum Status implements Serializable, Entity {
 
     REGISTERED("registered"),
     PAID("paid"),
-    CANCELED("canceled");
+    CANCELED("canceled"),
+    EMPTY("empty");
 
     private int id;
-    private String name;
-
-    Status() {
-        //POJO object
-    }
+    private final String name;
 
     Status(String name) {
         this.name = name;
@@ -23,16 +20,8 @@ public enum Status implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -41,5 +30,23 @@ public enum Status implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public static Status createStatus(String name, int id) {
+        Status status = EMPTY;
+        if (name == null) {
+            return status;
+        }
+        if (name.equalsIgnoreCase(REGISTERED.name)) {
+            status = REGISTERED;
+        }
+        if (name.equalsIgnoreCase(PAID.name)) {
+            status = PAID;
+        }
+        if (name.equalsIgnoreCase(CANCELED.name)) {
+            status = CANCELED;
+        }
+        status.id = id;
+        return status;
     }
 }

@@ -25,16 +25,17 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public List<Item> findAll() throws DaoException {
-        List<Item> itemList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
+            List<Item> itemList = new ArrayList<>();
             preparedStatement = connection.prepareStatement(QueryConstants.ITEM.SQL_FIND_ALL_ITEMS);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Item item = getItemFromResultSet(resultSet);
                 itemList.add(item);
             }
+            return itemList;
         } catch (SQLException e) {
             String exception = "Cannot find all user. " + e.getMessage();
             log.error(exception);
@@ -43,7 +44,6 @@ public class ItemDAOImpl implements ItemDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
-        return itemList;
     }
 
     private Item getItemFromResultSet(ResultSet resultSet) throws SQLException {
@@ -98,7 +98,6 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public Item get(int id) throws DaoException {
-        Item item;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
@@ -106,7 +105,7 @@ public class ItemDAOImpl implements ItemDAO {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            item = getItemFromResultSet(resultSet);
+            return getItemFromResultSet(resultSet);
         } catch (SQLException e) {
             String exception = String.format("Cannot get item by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
@@ -115,7 +114,6 @@ public class ItemDAOImpl implements ItemDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
-        return item;
     }
 
     @Override

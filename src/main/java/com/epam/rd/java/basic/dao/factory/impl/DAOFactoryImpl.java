@@ -2,10 +2,12 @@ package com.epam.rd.java.basic.dao.factory.impl;
 
 import com.epam.rd.java.basic.dao.CartDAO;
 import com.epam.rd.java.basic.dao.ItemDAO;
+import com.epam.rd.java.basic.dao.StatusDAO;
 import com.epam.rd.java.basic.dao.UserDAO;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.impl.CartDAOImpl;
 import com.epam.rd.java.basic.dao.impl.ItemDAOImpl;
+import com.epam.rd.java.basic.dao.impl.StatusDAOImpl;
 import com.epam.rd.java.basic.dao.impl.UserDAOImpl;
 
 import java.sql.Connection;
@@ -25,6 +27,11 @@ public class DAOFactoryImpl implements DAOFactory {
     @Override
     public CartDAO getCartDAO(Connection connection) {
         return new CartDAOImpl(connection);
+    }
+
+    @Override
+    public StatusDAO getStatusDAO(Connection connection) {
+        return new StatusDAOImpl(connection);
     }
 
 }

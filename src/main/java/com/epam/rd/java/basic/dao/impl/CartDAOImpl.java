@@ -6,6 +6,7 @@ import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.model.Cart;
 import com.epam.rd.java.basic.model.Role;
+import com.epam.rd.java.basic.model.Status;
 import com.epam.rd.java.basic.model.User;
 import lombok.extern.log4j.Log4j2;
 
@@ -26,16 +27,17 @@ public class CartDAOImpl implements CartDAO {
 
     @Override
     public List<Cart> findAll() throws DaoException {
-        List<Cart> cartList = new ArrayList<>();
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
+            List<Cart> cartList = new ArrayList<>();
             preparedStatement = connection.prepareStatement(QueryConstants.CART.SQL_FIND_ALL_CARTS);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Cart cart = getCartFromResultSet(resultSet);
                 cartList.add(cart);
             }
+            return cartList;
         } catch (SQLException e) {
             String exception = "Cannot find all cart. " + e.getMessage();
             log.error(exception);
@@ -44,10 +46,12 @@ public class CartDAOImpl implements CartDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
-        return cartList;
     }
 
     private Cart getCartFromResultSet(ResultSet resultSet) throws SQLException {
+        Status status = Status.createStatus(
+                resultSet.getString("status_name"),
+                resultSet.getInt("status_id"));
         User customer = User.builder()
                 .id(resultSet.getInt("customer_id"))
                 .login(resultSet.getString("customer_login"))
@@ -66,6 +70,7 @@ public class CartDAOImpl implements CartDAO {
                 .build();
         return Cart.builder()
                 .id(resultSet.getInt("cart_id"))
+                .status(status)
                 .customer(customer)
                 .userApproved(userApproved)
                 .createTime(resultSet.getTimestamp("cart_create_time"))
@@ -108,7 +113,6 @@ public class CartDAOImpl implements CartDAO {
 
     @Override
     public Cart get(int id) throws DaoException {
-        Cart cart;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
@@ -116,7 +120,7 @@ public class CartDAOImpl implements CartDAO {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            cart = getCartFromResultSet(resultSet);
+            return getCartFromResultSet(resultSet);
         } catch (SQLException e) {
             String exception = String.format("Cannot get cart by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
@@ -125,7 +129,6 @@ public class CartDAOImpl implements CartDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
-        return cart;
     }
 
     @Override

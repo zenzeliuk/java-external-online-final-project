@@ -2,7 +2,7 @@ package com.epam.rd.java.basic.model;
 
 import java.io.Serializable;
 
-public enum Role implements Serializable {
+public enum Role implements Serializable, Entity {
 
     ADMIN("admin"),
     USER("user"),

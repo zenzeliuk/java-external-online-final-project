@@ -1,11 +1,11 @@
 package com.epam.rd.java.basic.dao;
 
 import com.epam.rd.java.basic.exception.DaoException;
-import com.epam.rd.java.basic.model.BaseEntity;
+import com.epam.rd.java.basic.model.Entity;
 
 import java.util.List;
 
-public interface AbstractDAO<T extends BaseEntity> {
+public interface AbstractDAO<T extends Entity> {
 
     List<T> findAll() throws DaoException;
     int create(T t) throws DaoException;
