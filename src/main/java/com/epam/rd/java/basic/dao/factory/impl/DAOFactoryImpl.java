@@ -9,23 +9,13 @@ import java.sql.Connection;
 public class DAOFactoryImpl implements DAOFactory {
 
     @Override
-    public UserDAO getUserDAO(Connection connection) {
-        return new UserDAOImpl(connection);
-    }
-
-    @Override
-    public ItemDAO getItemDAO(Connection connection) {
-        return new ItemDAOImpl(connection);
-    }
-
-    @Override
     public CartDAO getCartDAO(Connection connection) {
         return new CartDAOImpl(connection);
     }
 
     @Override
-    public StatusDAO getStatusDAO(Connection connection) {
-        return new StatusDAOImpl(connection);
+    public CartItemDAO getCartItemDAO(Connection connection) {
+        return new CartItemDAOImpl(connection);
     }
 
     @Override
@@ -34,13 +24,24 @@ public class DAOFactoryImpl implements DAOFactory {
     }
 
     @Override
+    public ItemDAO getItemDAO(Connection connection) {
+        return new ItemDAOImpl(connection);
+    }
+
+    @Override
     public RoleDAO getRoleDAO(Connection connection) {
         return new RoleDAOImpl(connection);
     }
 
     @Override
-    public CartItemDAO getCartItemDAO(Connection connection) {
-        return new CartItemDAOImpl(connection);
+    public StatusDAO getStatusDAO(Connection connection) {
+        return new StatusDAOImpl(connection);
+    }
+
+
+    @Override
+    public UserDAO getUserDAO(Connection connection) {
+        return new UserDAOImpl(connection);
     }
 
     @Override

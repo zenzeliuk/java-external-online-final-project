@@ -10,6 +10,6 @@ public interface AbstractService<T extends Entity> {
     List<T> findAll() throws ServiceException;
     T create(T t) throws ServiceException;
     T get(int id) throws ServiceException;
-    boolean update(T entity) throws ServiceException;
+    boolean update(T t) throws ServiceException;
     boolean delete(int id) throws ServiceException;
 }

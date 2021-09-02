@@ -9,11 +9,7 @@ public enum Role implements Serializable, Entity {
     UNREGISTERED("unregistered");
 
     private int id;
-    private String name;
-
-    Role() {
-        //POJO object
-    }
+    private final String name;
 
     Role(String name) {
         this.name = name;
@@ -23,16 +19,12 @@ public enum Role implements Serializable, Entity {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -49,9 +41,10 @@ public enum Role implements Serializable, Entity {
             return role;
         }
         if (name.equalsIgnoreCase(ADMIN.name)) {
-            role = Role.ADMIN;
-        } else if (name.equalsIgnoreCase(USER.name)) {
-            role = Role.USER;
+            role = ADMIN;
+        }
+        if (name.equalsIgnoreCase(USER.name)) {
+            role = USER;
         }
         role.id = id;
         return role;

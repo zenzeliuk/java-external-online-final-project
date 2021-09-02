@@ -1,52 +1,52 @@
 package com.epam.rd.java.basic.service.impl;
 
-import com.epam.rd.java.basic.dao.UserDAO;
+import com.epam.rd.java.basic.dao.ItemDAO;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
-import com.epam.rd.java.basic.model.User;
-import com.epam.rd.java.basic.service.UserService;
+import com.epam.rd.java.basic.model.Item;
+import com.epam.rd.java.basic.service.ItemService;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
 @Log4j2
-public class UserServiceImpl implements UserService {
+public class ItemServiceImpl implements ItemService {
 
     private final DAOFactory daoFactory;
-    private UserDAO userDAO;
+    private ItemDAO itemDAO;
 
-    public UserServiceImpl() {
+    public ItemServiceImpl() {
         daoFactory = new DAOFactoryImpl();
     }
 
     @Override
-    public List<User> findAll() throws ServiceException {
+    public List<Item> findAll() throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            return userDAO.findAll();
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            return itemDAO.findAll();
         } catch (DaoException e) {
-            String exception = "Cannot find all user. " + e.getMessage();
+            String exception = "Cannot find all items. " + e.getMessage();
             log.error(exception);
             throw new ServiceException(exception);
         }
     }
 
     @Override
-    public User create(User user) throws ServiceException {
+    public Item create(Item item) throws ServiceException {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            int id = userDAO.create(user);
-            user.setId(id);
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            int id = itemDAO.create(item);
+            item.setId(id);
             dbConnection.commit();
-            return user;
+            return item;
         } catch (DaoException e) {
-            String exception = "Cannot create user. " + user.toString() + e.getMessage();
+            String exception = "Cannot create item. " + item.toString() + e.getMessage();
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
@@ -56,24 +56,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User get(int id) throws ServiceException {
+    public Item get(int id) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            return userDAO.get(id);
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            return itemDAO.get(id);
         } catch (DaoException e) {
-            String exception = String.format("Cannot get user by id='%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get item by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new ServiceException(exception);
         }
     }
 
     @Override
-    public boolean update(User user) throws ServiceException {
+    public boolean update(Item item) throws ServiceException {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            if (userDAO.update(user)) {
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            if (itemDAO.update(item)) {
                 dbConnection.commit();
                 return true;
             } else {
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
         } catch (DaoException e) {
-            String exception = "Cannot update user. " + user.toString() + e.getMessage();
+            String exception = "Cannot update item. " + item.toString() + e.getMessage();
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
@@ -95,8 +95,8 @@ public class UserServiceImpl implements UserService {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            if (userDAO.delete(id)) {
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            if (itemDAO.delete(id)) {
                 dbConnection.commit();
                 return true;
             } else {
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
         } catch (DaoException e) {
-            String exception = String.format("Cannot delete user by id='%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete item by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
