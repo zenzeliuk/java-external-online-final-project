@@ -15,17 +15,55 @@ public class CartItem extends BaseEntity implements Serializable {
     private Timestamp updateTime;
 
     public CartItem() {
+        //POJO object
     }
 
-    public CartItem(int id, Cart cart, Item item, BigDecimal price, int countItem,
-                    Timestamp createTime, Timestamp updateTime) {
-        super(id);
-        this.cart = cart;
-        this.item = item;
-        this.price = price;
-        this.countItem = countItem;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
+    public static Builder builder() {
+        return new CartItem().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+        }
+
+        public Builder id(int id) {
+            CartItem.this.id = id;
+            return this;
+        }
+
+        public Builder cart(Cart cart) {
+            CartItem.this.cart = cart;
+            return this;
+        }
+
+        public Builder item(Item item) {
+            CartItem.this.item = item;
+            return this;
+        }
+
+        public Builder price(BigDecimal price) {
+            CartItem.this.price = price;
+            return this;
+        }
+
+        public Builder countItem(int countItem) {
+            CartItem.this.countItem = countItem;
+            return this;
+        }
+
+        public Builder createTime(Timestamp createTime) {
+            CartItem.this.createTime = createTime;
+            return this;
+        }
+
+        public Builder updateTime(Timestamp updateTime) {
+            CartItem.this.updateTime = updateTime;
+            return this;
+        }
+
+        public CartItem build() {
+            return CartItem.this;
+        }
     }
 
     public Cart getCart() {

@@ -12,6 +12,7 @@ public class Item extends BaseEntity {
     private Category category;
 
     public Item() {
+        //POJO object
     }
 
     public static Builder builder() {

@@ -1,5 +1,6 @@
-package com.epam.rd.java.basic.dao.connection;
+package com.epam.rd.java.basic.dao.connection.impl;
 
+import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.util.DBConnectionPool;
 import lombok.extern.log4j.Log4j2;
 

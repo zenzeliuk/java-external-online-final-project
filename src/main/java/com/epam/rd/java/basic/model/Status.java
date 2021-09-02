@@ -12,6 +12,7 @@ public enum Status implements Serializable {
     private String name;
 
     Status() {
+        //POJO object
     }
 
     Status(String name) {

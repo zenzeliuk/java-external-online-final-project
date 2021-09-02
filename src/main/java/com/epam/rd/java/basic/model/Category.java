@@ -10,6 +10,7 @@ public class Category extends BaseEntity implements Serializable {
     private Category parentCategory;
 
     public Category() {
+        //POJO object
     }
 
     public static Builder builder() {

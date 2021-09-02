@@ -1,10 +1,10 @@
 package com.epam.rd.java.basic.service.impl;
 
-import com.epam.rd.java.basic.dao.DAOFactory;
+import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.UserDAO;
-import com.epam.rd.java.basic.dao.connection.ConnectionImpl;
+import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
-import com.epam.rd.java.basic.dao.impl.DAOFactoryImpl;
+import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.User;

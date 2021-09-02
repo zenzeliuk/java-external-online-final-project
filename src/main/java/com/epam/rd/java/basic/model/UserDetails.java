@@ -7,7 +7,6 @@ import java.util.Objects;
 
 public class UserDetails extends BaseEntity implements Serializable {
 
-    //    private User user;
     private int userId;
     private String firstName;
     private String lastName;
@@ -16,16 +15,55 @@ public class UserDetails extends BaseEntity implements Serializable {
     private int age;
 
     public UserDetails() {
+        //POJO object
     }
 
-    public UserDetails(int id, int userId, String firstName, String lastName, String email, BigInteger phone, int age) {
-        super(id);
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-        this.age = age;
+    public static Builder builder() {
+        return new UserDetails().new Builder();
+    }
+
+    public class Builder {
+        private Builder() {
+        }
+
+        public Builder id(int id) {
+            UserDetails.this.id = id;
+            return this;
+        }
+
+        public Builder userId(int userId) {
+            UserDetails.this.userId = userId;
+            return this;
+        }
+
+        public Builder firstName(String firstName) {
+            UserDetails.this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName) {
+            UserDetails.this.lastName = lastName;
+            return this;
+        }
+
+        public Builder email(String email) {
+            UserDetails.this.email = email;
+            return this;
+        }
+
+        public Builder phone(BigInteger phone) {
+            UserDetails.this.phone = phone;
+            return this;
+        }
+
+        public Builder age(int age) {
+            UserDetails.this.age = age;
+            return this;
+        }
+
+        public UserDetails build() {
+            return UserDetails.this;
+        }
     }
 
     public int getUserId() {

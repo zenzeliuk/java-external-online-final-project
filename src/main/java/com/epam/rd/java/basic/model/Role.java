@@ -12,6 +12,7 @@ public enum Role implements Serializable {
     private String name;
 
     Role() {
+        //POJO object
     }
 
     Role(String name) {

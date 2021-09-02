@@ -10,7 +10,7 @@ public interface AbstractDAO<T extends BaseEntity> {
     List<T> findAll() throws DaoException;
     int create(T t) throws DaoException;
     T get(int id) throws DaoException;
-    boolean update(T entity) throws DaoException;
+    boolean update(T t) throws DaoException;
     boolean delete(int id) throws DaoException;
 
 }

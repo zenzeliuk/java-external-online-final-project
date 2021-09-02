@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
 
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
         Role role = Role.createRole(
-                resultSet.getString("role_id"),
+                resultSet.getString("name"),
                 resultSet.getInt("role_id"));
         return User
                 .builder()
@@ -66,15 +66,13 @@ public class UserDAOImpl implements UserDAO {
         try {
             preparedStatement = connection.prepareStatement
                     (QueryConstants.USER.SQL_CREATE_USER, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setInt(3, user.getRole().getId());
+            setPreparedStatementWithoutId(user, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else {
-                throw new DaoException("Cannot get generated id. ");
+                throw new DaoException("Cannot get generated user id. ");
             }
         } catch (SQLException e) {
             String exception = "Cannot create user. " + user.toString() + e.getMessage();
@@ -84,6 +82,12 @@ public class UserDAOImpl implements UserDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
+    }
+
+    private void setPreparedStatementWithoutId(User user, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1, user.getLogin());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setInt(3, user.getRole().getId());
     }
 
     @Override
@@ -113,9 +117,7 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_UPDATE_USER);
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setInt(3, user.getRole().getId());
+            setPreparedStatementWithoutId(user, preparedStatement);
             preparedStatement.setInt(4, user.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -126,7 +128,6 @@ public class UserDAOImpl implements UserDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
-
 
     @Override
     public boolean delete(int id) throws DaoException {
@@ -143,5 +144,4 @@ public class UserDAOImpl implements UserDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
-
 }
