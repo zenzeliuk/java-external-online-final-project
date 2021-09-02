@@ -28,14 +28,14 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            List<User> userList = new ArrayList<>();
-            preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_FIND_ALL_USERS);
+            List<User> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.FIND_ALL);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                User user = getUserFromResultSet(resultSet);
-                userList.add(user);
+                User result = getFromResultSet(resultSet);
+                resultList.add(result);
             }
-            return userList;
+            return resultList;
         } catch (SQLException e) {
             String exception = "Cannot find all user. " + e.getMessage();
             log.error(exception);
@@ -46,7 +46,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+    private User getFromResultSet(ResultSet resultSet) throws SQLException {
         Role role = Role.createRole(
                 resultSet.getString("name"),
                 resultSet.getInt("role_id"));
@@ -65,7 +65,7 @@ public class UserDAOImpl implements UserDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.USER.SQL_CREATE_USER, Statement.RETURN_GENERATED_KEYS);
+                    (QueryConstants.USER.CREATE, Statement.RETURN_GENERATED_KEYS);
             setPreparedStatementWithoutId(user, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
@@ -95,11 +95,11 @@ public class UserDAOImpl implements UserDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_GET_USER_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.GET_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return getUserFromResultSet(resultSet);
+            return getFromResultSet(resultSet);
         } catch (SQLException e) {
             String exception = String.format("Cannot get user by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
@@ -114,7 +114,7 @@ public class UserDAOImpl implements UserDAO {
     public boolean update(User user) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_UPDATE_USER);
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.UPDATE);
             setPreparedStatementWithoutId(user, preparedStatement);
             preparedStatement.setInt(4, user.getId());
             return preparedStatement.executeUpdate() == 1;
@@ -131,7 +131,7 @@ public class UserDAOImpl implements UserDAO {
     public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.USER.SQL_DELETE_USER_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {

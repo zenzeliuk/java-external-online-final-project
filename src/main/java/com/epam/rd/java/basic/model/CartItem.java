@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class CartItem extends BaseEntity implements Serializable {
 
-    private Cart cart;
-    private Item item;
+    private int cartId;
+    private int itemId;
     private BigDecimal price;
     private int countItem;
     private Timestamp createTime;
@@ -31,13 +31,13 @@ public class CartItem extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder cart(Cart cart) {
-            CartItem.this.cart = cart;
+        public Builder cart(int cartId) {
+            CartItem.this.cartId = cartId;
             return this;
         }
 
-        public Builder item(Item item) {
-            CartItem.this.item = item;
+        public Builder item(int itemId) {
+            CartItem.this.itemId = itemId;
             return this;
         }
 
@@ -66,20 +66,20 @@ public class CartItem extends BaseEntity implements Serializable {
         }
     }
 
-    public Cart getCart() {
-        return cart;
+    public int getCartId() {
+        return cartId;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public void setCartId(int cartId) {
+        this.cartId = cartId;
     }
 
-    public Item getItem() {
-        return item;
+    public int getItemId() {
+        return itemId;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
     }
 
     public BigDecimal getPrice() {
@@ -120,9 +120,9 @@ public class CartItem extends BaseEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CartItem cartItem = (CartItem) o;
-        return countItem == cartItem.countItem
-                && Objects.equals(cart, cartItem.cart)
-                && Objects.equals(item, cartItem.item)
+        return cartId == cartItem.cartId
+                && itemId == cartItem.itemId
+                && countItem == cartItem.countItem
                 && Objects.equals(price, cartItem.price)
                 && Objects.equals(createTime, cartItem.createTime)
                 && Objects.equals(updateTime, cartItem.updateTime);
@@ -130,15 +130,15 @@ public class CartItem extends BaseEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), cart, item, price, countItem, createTime, updateTime);
+        return Objects.hash(super.hashCode(), cartId, itemId, price, countItem, createTime, updateTime);
     }
 
     @Override
     public String toString() {
         return "CartItem{" +
                 "id=" + getId() +
-                ", cart=" + cart +
-                ", item=" + item +
+                ", cart_id=" + cartId +
+                ", item_id=" + itemId +
                 ", price=" + price +
                 ", countItem=" + countItem +
                 ", createTime=" + createTime +

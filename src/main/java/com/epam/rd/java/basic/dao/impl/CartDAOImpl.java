@@ -30,14 +30,14 @@ public class CartDAOImpl implements CartDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            List<Cart> cartList = new ArrayList<>();
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.SQL_FIND_ALL_CARTS);
+            List<Cart> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.FIND_ALL);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Cart cart = getCartFromResultSet(resultSet);
-                cartList.add(cart);
+                Cart result = getFromResultSet(resultSet);
+                resultList.add(result);
             }
-            return cartList;
+            return resultList;
         } catch (SQLException e) {
             String exception = "Cannot find all cart. " + e.getMessage();
             log.error(exception);
@@ -48,7 +48,7 @@ public class CartDAOImpl implements CartDAO {
         }
     }
 
-    private Cart getCartFromResultSet(ResultSet resultSet) throws SQLException {
+    private Cart getFromResultSet(ResultSet resultSet) throws SQLException {
         Status status = Status.createStatus(
                 resultSet.getString("status_name"),
                 resultSet.getInt("status_id"));
@@ -84,7 +84,7 @@ public class CartDAOImpl implements CartDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.CART.SQL_CREATE_CART, Statement.RETURN_GENERATED_KEYS);
+                    (QueryConstants.CART.CREATE, Statement.RETURN_GENERATED_KEYS);
             setPreparedStatementWithoutId(cart, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
@@ -107,8 +107,6 @@ public class CartDAOImpl implements CartDAO {
         preparedStatement.setInt(1, cart.getStatus().getId());
         preparedStatement.setInt(2, cart.getCustomer().getId());
         preparedStatement.setInt(3, cart.getUserApproved().getId());
-        preparedStatement.setTimestamp(4, cart.getCreateTime());
-        preparedStatement.setTimestamp(5, cart.getUpdateTime());
     }
 
     @Override
@@ -116,11 +114,11 @@ public class CartDAOImpl implements CartDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.SQL_GET_CART_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return getCartFromResultSet(resultSet);
+            return getFromResultSet(resultSet);
         } catch (SQLException e) {
             String exception = String.format("Cannot get cart by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
@@ -135,9 +133,9 @@ public class CartDAOImpl implements CartDAO {
     public boolean update(Cart cart) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.SQL_UPDATE_CART);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.UPDATE);
             setPreparedStatementWithoutId(cart, preparedStatement);
-            preparedStatement.setInt(6, cart.getId());
+            preparedStatement.setInt(4, cart.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             String exception = "Cannot update cart. " + cart.toString() + e.getMessage();
@@ -152,7 +150,7 @@ public class CartDAOImpl implements CartDAO {
     public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.SQL_DELETE_CART_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {

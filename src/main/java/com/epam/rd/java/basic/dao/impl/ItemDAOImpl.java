@@ -28,14 +28,14 @@ public class ItemDAOImpl implements ItemDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            List<Item> itemList = new ArrayList<>();
-            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.SQL_FIND_ALL_ITEMS);
+            List<Item> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.FIND_ALL);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Item item = getItemFromResultSet(resultSet);
-                itemList.add(item);
+                Item result = getFromResultSet(resultSet);
+                resultList.add(result);
             }
-            return itemList;
+            return resultList;
         } catch (SQLException e) {
             String exception = "Cannot find all user. " + e.getMessage();
             log.error(exception);
@@ -46,7 +46,7 @@ public class ItemDAOImpl implements ItemDAO {
         }
     }
 
-    private Item getItemFromResultSet(ResultSet resultSet) throws SQLException {
+    private Item getFromResultSet(ResultSet resultSet) throws SQLException {
         Category category = Category.builder()
                 .id(resultSet.getInt("id"))
                 .name(resultSet.getString("name"))
@@ -69,7 +69,7 @@ public class ItemDAOImpl implements ItemDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.ITEM.SQL_CREATE_ITEM, Statement.RETURN_GENERATED_KEYS);
+                    (QueryConstants.ITEM.CREATE, Statement.RETURN_GENERATED_KEYS);
             setPreparedStatementWithoutId(item, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
@@ -101,11 +101,11 @@ public class ItemDAOImpl implements ItemDAO {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.SQL_GET_ITEM_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.GET_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            return getItemFromResultSet(resultSet);
+            return getFromResultSet(resultSet);
         } catch (SQLException e) {
             String exception = String.format("Cannot get item by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
@@ -120,7 +120,7 @@ public class ItemDAOImpl implements ItemDAO {
     public boolean update(Item item) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.SQL_UPDATE_ITEM);
+            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.UPDATE);
             setPreparedStatementWithoutId(item, preparedStatement);
             preparedStatement.setInt(6, item.getId());
             return preparedStatement.executeUpdate() == 1;
@@ -137,7 +137,7 @@ public class ItemDAOImpl implements ItemDAO {
     public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.SQL_DELETE_ITEM_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.ITEM.DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {

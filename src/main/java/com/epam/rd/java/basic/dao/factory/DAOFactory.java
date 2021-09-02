@@ -1,9 +1,6 @@
 package com.epam.rd.java.basic.dao.factory;
 
-import com.epam.rd.java.basic.dao.CartDAO;
-import com.epam.rd.java.basic.dao.ItemDAO;
-import com.epam.rd.java.basic.dao.StatusDAO;
-import com.epam.rd.java.basic.dao.UserDAO;
+import com.epam.rd.java.basic.dao.*;
 
 import java.sql.Connection;
 
@@ -13,6 +10,9 @@ public interface DAOFactory {
     ItemDAO getItemDAO(Connection connection);
     CartDAO getCartDAO(Connection connection);
     StatusDAO getStatusDAO(Connection connection);
-
+    CategoryDAO getCategoryDAO(Connection connection);
+    RoleDAO getRoleDAO(Connection connection);
+    CartItemDAO getCartItemDAO(Connection connection);
+    UserDetailsDAO getUserDetailsDAO(Connection connection);
 }
 

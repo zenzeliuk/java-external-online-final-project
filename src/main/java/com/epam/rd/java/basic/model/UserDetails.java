@@ -1,17 +1,15 @@
 package com.epam.rd.java.basic.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Objects;
 
 
 public class UserDetails extends BaseEntity implements Serializable {
 
-    private int userId;
     private String firstName;
     private String lastName;
     private String email;
-    private BigInteger phone;
+    private Long phone;
     private int age;
 
     public UserDetails() {
@@ -26,13 +24,8 @@ public class UserDetails extends BaseEntity implements Serializable {
         private Builder() {
         }
 
-        public Builder id(int id) {
+        public Builder userId(int id) {
             UserDetails.this.id = id;
-            return this;
-        }
-
-        public Builder userId(int userId) {
-            UserDetails.this.userId = userId;
             return this;
         }
 
@@ -51,7 +44,7 @@ public class UserDetails extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder phone(BigInteger phone) {
+        public Builder phone(Long phone) {
             UserDetails.this.phone = phone;
             return this;
         }
@@ -64,14 +57,6 @@ public class UserDetails extends BaseEntity implements Serializable {
         public UserDetails build() {
             return UserDetails.this;
         }
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -98,11 +83,11 @@ public class UserDetails extends BaseEntity implements Serializable {
         this.email = email;
     }
 
-    public BigInteger getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(BigInteger phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 
@@ -120,8 +105,7 @@ public class UserDetails extends BaseEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         UserDetails that = (UserDetails) o;
-        return userId == that.userId
-                && age == that.age
+        return age == that.age
                 && Objects.equals(firstName, that.firstName)
                 && Objects.equals(lastName, that.lastName)
                 && Objects.equals(email, that.email)
@@ -130,14 +114,13 @@ public class UserDetails extends BaseEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), userId, firstName, lastName, email, phone, age);
+        return Objects.hash(super.hashCode(), firstName, lastName, email, phone, age);
     }
 
     @Override
     public String toString() {
         return "UserDetails{" +
-                "id=" + getId() +
-                ", userId=" + userId +
+                ", userId=" + getId() +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

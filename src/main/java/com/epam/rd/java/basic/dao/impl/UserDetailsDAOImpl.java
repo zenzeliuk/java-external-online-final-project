@@ -1,10 +1,10 @@
 package com.epam.rd.java.basic.dao.impl;
 
-import com.epam.rd.java.basic.dao.StatusDAO;
+import com.epam.rd.java.basic.dao.UserDetailsDAO;
 import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
-import com.epam.rd.java.basic.model.Status;
+import com.epam.rd.java.basic.model.UserDetails;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
@@ -12,31 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
-public class StatusDAOImpl implements StatusDAO {
+public class UserDetailsDAOImpl implements UserDetailsDAO {
 
     private final Connection connection;
     private final CloseResources close;
 
-    public StatusDAOImpl(Connection connection) {
+    public UserDetailsDAOImpl(Connection connection) {
         this.connection = connection;
         close = new CloseResourcesImpl();
     }
 
     @Override
-    public List<Status> findAll() throws DaoException {
+    public List<UserDetails> findAll() throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            List<Status> resultList = new ArrayList<>();
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.FIND_ALL);
+            List<UserDetails> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.USER_DETAILS.FIND_ALL);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Status result = getFromResultSet(resultSet);
+                UserDetails result = getFromResultSet(resultSet);
                 resultList.add(result);
             }
             return resultList;
         } catch (SQLException e) {
-            String exception = "Cannot find all status. " + e.getMessage();
+            String exception = "Cannot find all user_details. " + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -45,29 +45,34 @@ public class StatusDAOImpl implements StatusDAO {
         }
     }
 
-    private Status getFromResultSet(ResultSet resultSet) throws SQLException {
-        return Status.createStatus(
-                resultSet.getString("status_name"),
-                resultSet.getInt("status_id"));
+    private UserDetails getFromResultSet(ResultSet resultSet) throws SQLException {
+        return UserDetails.builder()
+                .userId(resultSet.getInt("user_id"))
+                .firstName(resultSet.getString("firs_name"))
+                .lastName(resultSet.getString("last_name"))
+                .email(resultSet.getString("email"))
+                .phone(resultSet.getLong("phone"))
+                .age(resultSet.getInt("age"))
+                .build();
     }
 
     @Override
-    public int create(Status status) throws DaoException {
+    public int create(UserDetails userDetails) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.STATUS.CREATE, Statement.RETURN_GENERATED_KEYS);
-            setPreparedStatementWithoutId(status, preparedStatement);
+                    (QueryConstants.USER_DETAILS.CREATE, Statement.RETURN_GENERATED_KEYS);
+            setPreparedStatementWithoutId(userDetails, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else {
-                throw new DaoException("Cannot get generated status id. ");
+                throw new DaoException("Cannot get generated user_details id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create status. " + status.toString() + e.getMessage();
+            String exception = "Cannot create user_details. " + userDetails.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -76,22 +81,27 @@ public class StatusDAOImpl implements StatusDAO {
         }
     }
 
-    private void setPreparedStatementWithoutId(Status status, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, status.getName());
+    private void setPreparedStatementWithoutId(UserDetails userDetails, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setInt(1, userDetails.getId());
+        preparedStatement.setString(2, userDetails.getFirstName());
+        preparedStatement.setString(3, userDetails.getLastName());
+        preparedStatement.setString(4, userDetails.getEmail());
+        preparedStatement.setLong(5, userDetails.getPhone());
+        preparedStatement.setInt(6, userDetails.getAge());
     }
 
     @Override
-    public Status get(int id) throws DaoException {
+    public UserDetails get(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.GET_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.USER_DETAILS.GET_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return getFromResultSet(resultSet);
         } catch (SQLException e) {
-            String exception = String.format("Cannot get status by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get user_details by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -101,15 +111,15 @@ public class StatusDAOImpl implements StatusDAO {
     }
 
     @Override
-    public boolean update(Status status) throws DaoException {
+    public boolean update(UserDetails userDetails) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.UPDATE);
-            setPreparedStatementWithoutId(status, preparedStatement);
-            preparedStatement.setInt(2, status.getId());
+            preparedStatement = connection.prepareStatement(QueryConstants.USER_DETAILS.UPDATE);
+            setPreparedStatementWithoutId(userDetails, preparedStatement);
+            preparedStatement.setInt(7, userDetails.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = "Cannot update status. " + status.toString() + e.getMessage();
+            String exception = "Cannot update user_details. " + userDetails.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -121,11 +131,11 @@ public class StatusDAOImpl implements StatusDAO {
     public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.DELETE_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.USER_DETAILS.DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = String.format("Cannot delete status by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete user_details by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {

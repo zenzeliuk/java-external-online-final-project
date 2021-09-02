@@ -1,10 +1,10 @@
 package com.epam.rd.java.basic.dao.impl;
 
-import com.epam.rd.java.basic.dao.StatusDAO;
+import com.epam.rd.java.basic.dao.CartItemDAO;
 import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
-import com.epam.rd.java.basic.model.Status;
+import com.epam.rd.java.basic.model.CartItem;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
@@ -12,31 +12,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
-public class StatusDAOImpl implements StatusDAO {
+public class CartItemDAOImpl implements CartItemDAO {
 
     private final Connection connection;
     private final CloseResources close;
 
-    public StatusDAOImpl(Connection connection) {
+    public CartItemDAOImpl(Connection connection) {
         this.connection = connection;
         close = new CloseResourcesImpl();
     }
 
     @Override
-    public List<Status> findAll() throws DaoException {
+    public List<CartItem> findAll() throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            List<Status> resultList = new ArrayList<>();
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.FIND_ALL);
+            List<CartItem> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.CART_ITEM.FIND_ALL);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Status result = getFromResultSet(resultSet);
+                CartItem result = getFromResultSet(resultSet);
                 resultList.add(result);
             }
             return resultList;
         } catch (SQLException e) {
-            String exception = "Cannot find all status. " + e.getMessage();
+            String exception = "Cannot find all cart_item. " + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -45,29 +45,35 @@ public class StatusDAOImpl implements StatusDAO {
         }
     }
 
-    private Status getFromResultSet(ResultSet resultSet) throws SQLException {
-        return Status.createStatus(
-                resultSet.getString("status_name"),
-                resultSet.getInt("status_id"));
+    private CartItem getFromResultSet(ResultSet resultSet) throws SQLException {
+        return CartItem.builder()
+                .id(resultSet.getInt("cart_item_id"))
+                .cart(resultSet.getInt("cart_id"))
+                .item(resultSet.getInt("item_id"))
+                .price(resultSet.getBigDecimal("price"))
+                .countItem(resultSet.getInt("count_item"))
+                .createTime(resultSet.getTimestamp("create_time"))
+                .updateTime(resultSet.getTimestamp("update_time"))
+                .build();
     }
 
     @Override
-    public int create(Status status) throws DaoException {
+    public int create(CartItem cartItem) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.STATUS.CREATE, Statement.RETURN_GENERATED_KEYS);
-            setPreparedStatementWithoutId(status, preparedStatement);
+                    (QueryConstants.CART_ITEM.CREATE, Statement.RETURN_GENERATED_KEYS);
+            setPreparedStatementWithoutId(cartItem, preparedStatement);
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else {
-                throw new DaoException("Cannot get generated status id. ");
+                throw new DaoException("Cannot get generated cart_item id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create status. " + status.toString() + e.getMessage();
+            String exception = "Cannot create cart_item. " + cartItem.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -76,22 +82,25 @@ public class StatusDAOImpl implements StatusDAO {
         }
     }
 
-    private void setPreparedStatementWithoutId(Status status, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, status.getName());
+    private void setPreparedStatementWithoutId(CartItem cartItem, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setInt(1, cartItem.getCartId());
+        preparedStatement.setInt(2, cartItem.getItemId());
+        preparedStatement.setBigDecimal(3, cartItem.getPrice());
+        preparedStatement.setInt(4, cartItem.getCountItem());
     }
 
     @Override
-    public Status get(int id) throws DaoException {
+    public CartItem get(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.GET_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART_ITEM.GET_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return getFromResultSet(resultSet);
         } catch (SQLException e) {
-            String exception = String.format("Cannot get status by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get cart_item by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -101,15 +110,15 @@ public class StatusDAOImpl implements StatusDAO {
     }
 
     @Override
-    public boolean update(Status status) throws DaoException {
+    public boolean update(CartItem cartItem) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.UPDATE);
-            setPreparedStatementWithoutId(status, preparedStatement);
-            preparedStatement.setInt(2, status.getId());
+            preparedStatement = connection.prepareStatement(QueryConstants.CART_ITEM.UPDATE);
+            setPreparedStatementWithoutId(cartItem, preparedStatement);
+            preparedStatement.setInt(5, cartItem.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = "Cannot update status. " + status.toString() + e.getMessage();
+            String exception = "Cannot update cart_item. " + cartItem.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -121,11 +130,11 @@ public class StatusDAOImpl implements StatusDAO {
     public boolean delete(int id) throws DaoException {
         PreparedStatement preparedStatement = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.DELETE_BY_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART_ITEM.DELETE_BY_ID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = String.format("Cannot delete status by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete cart_item by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {

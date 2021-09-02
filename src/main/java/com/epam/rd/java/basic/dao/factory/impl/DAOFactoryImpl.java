@@ -1,14 +1,8 @@
 package com.epam.rd.java.basic.dao.factory.impl;
 
-import com.epam.rd.java.basic.dao.CartDAO;
-import com.epam.rd.java.basic.dao.ItemDAO;
-import com.epam.rd.java.basic.dao.StatusDAO;
-import com.epam.rd.java.basic.dao.UserDAO;
+import com.epam.rd.java.basic.dao.*;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
-import com.epam.rd.java.basic.dao.impl.CartDAOImpl;
-import com.epam.rd.java.basic.dao.impl.ItemDAOImpl;
-import com.epam.rd.java.basic.dao.impl.StatusDAOImpl;
-import com.epam.rd.java.basic.dao.impl.UserDAOImpl;
+import com.epam.rd.java.basic.dao.impl.*;
 
 import java.sql.Connection;
 
@@ -32,6 +26,26 @@ public class DAOFactoryImpl implements DAOFactory {
     @Override
     public StatusDAO getStatusDAO(Connection connection) {
         return new StatusDAOImpl(connection);
+    }
+
+    @Override
+    public CategoryDAO getCategoryDAO(Connection connection) {
+        return new CategoryDAOImpl(connection);
+    }
+
+    @Override
+    public RoleDAO getRoleDAO(Connection connection) {
+        return new RoleDAOImpl(connection);
+    }
+
+    @Override
+    public CartItemDAO getCartItemDAO(Connection connection) {
+        return new CartItemDAOImpl(connection);
+    }
+
+    @Override
+    public UserDetailsDAO getUserDetailsDAO(Connection connection) {
+        return new UserDetailsDAOImpl(connection);
     }
 
 }
