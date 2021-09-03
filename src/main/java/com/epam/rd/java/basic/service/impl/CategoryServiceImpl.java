@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             dbConnection.autoCommit(false);
             categoryDAO = daoFactory.getCategoryDAO(dbConnection.getConnection());
-            int id = categoryDAO.create(category);
+            Integer id = categoryDAO.create(category);
             category.setId(id);
             dbConnection.commit();
             return category;

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class BaseEntity implements Serializable, Entity {
 
-    protected int id;
+    protected Integer id;
 
     protected BaseEntity() {
     }
@@ -19,16 +19,16 @@ public abstract class BaseEntity implements Serializable, Entity {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BaseEntity)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
-        return id == that.id;
+        return Objects.equals(id, that.id);
     }
 
     @Override

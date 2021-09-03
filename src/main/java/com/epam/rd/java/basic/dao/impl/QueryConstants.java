@@ -5,39 +5,37 @@ public class QueryConstants {
     private QueryConstants() {
     }
 
+    /*
+    SELECT user.id       AS id,
+           user.login    AS login,
+           user.password AS password,
+           role.id       AS role_id,
+           role.name     AS name
+    FROM shop.user AS user,
+         shop.role AS role
+    WHERE user.role_id = role.id;
+     */
     public static class USER {
         public static final String FIND_ALL = "" +
-                "SELECT " +
-                "       user.id       AS id, " +
+                "SELECT user.id       AS id, " +
                 "       user.login    AS login, " +
                 "       user.password AS password, " +
                 "       role.id       AS role_id, " +
                 "       role.name     AS name " +
-                "FROM shop.user AS user " +
-                "         JOIN role ON user.role_id = role.id " +
-                "ORDER BY id ASC;";
-        public static final String CREATE = "" +
-                "INSERT INTO user (login, password, role_id) " +
-                "VALUES (?, ?, ?)";
-        public static final String GET_BY_ID = "" +
-                "SELECT " +
-                "       user.id       AS id, " +
-                "       user.login    AS login, " +
-                "       user.password AS password, " +
-                "       role.id       AS role_id, " +
-                "       role.name     AS name " +
-                "FROM shop.user AS user " +
-                "         JOIN role ON user.role_id = role.id " +
-                "WHERE user.id = ?";
+                "FROM shop.user AS user, " +
+                "     shop.role AS role " +
+                "WHERE user.role_id = role.id";
+        public static final String CREATE = "INSERT INTO shop.user (login, password, role_id) VALUES (?, ?, ?)";
+        public static final String GET_BY_ID = FIND_ALL + " AND user.id = ?";
         public static final String UPDATE = "" +
-                "UPDATE user " +
+                "UPDATE shop.user AS user " +
                 "SET user.login    = ?, " +
                 "    user.password = ?, " +
                 "    user.role_id  = ? " +
                 "WHERE id = ?";
         public static final String DELETE_BY_ID = "" +
                 "DELETE " +
-                "FROM user " +
+                "FROM shop.user " +
                 "WHERE id = ?";
     }
 

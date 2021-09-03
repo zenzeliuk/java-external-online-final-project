@@ -7,7 +7,7 @@ public class Category extends BaseEntity implements Serializable {
 
     private String name;
     private String description;
-    private int parentCategory;
+    private Integer parentCategory;
 
     public Category() {
         //POJO object
@@ -36,7 +36,7 @@ public class Category extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder parentCategory(int parentCategory) {
+        public Builder parentCategory(Integer parentCategory) {
             Category.this.parentCategory = parentCategory;
             return this;
         }
@@ -63,7 +63,7 @@ public class Category extends BaseEntity implements Serializable {
         this.description = description;
     }
 
-    public int getParentCategory() {
+    public Integer getParentCategory() {
         return parentCategory;
     }
 
@@ -77,9 +77,7 @@ public class Category extends BaseEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Category category = (Category) o;
-        return parentCategory == category.parentCategory
-                && Objects.equals(name, category.name)
-                && Objects.equals(description, category.description);
+        return Objects.equals(name, category.name) && Objects.equals(description, category.description) && Objects.equals(parentCategory, category.parentCategory);
     }
 
     @Override
