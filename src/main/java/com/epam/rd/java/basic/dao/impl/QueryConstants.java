@@ -5,16 +5,6 @@ public class QueryConstants {
     private QueryConstants() {
     }
 
-    /*
-    SELECT user.id       AS id,
-           user.login    AS login,
-           user.password AS password,
-           role.id       AS role_id,
-           role.name     AS name
-    FROM shop.user AS user,
-         shop.role AS role
-    WHERE user.role_id = role.id;
-     */
     public static class USER {
         public static final String FIND_ALL = "" +
                 "SELECT user.id       AS id, " +
@@ -37,6 +27,7 @@ public class QueryConstants {
                 "DELETE " +
                 "FROM shop.user " +
                 "WHERE id = ?";
+        public static final String FIND_BY_LOGIN = FIND_ALL + " AND user.login = ?";
     }
 
     public static class ITEM {
@@ -46,27 +37,12 @@ public class QueryConstants {
                 "       i.code        AS item_code, " +
                 "       i.price       AS item_price, " +
                 "       i.description AS item_description, " +
-                "       c.id          AS id, " +
-                "       c.name        AS name, " +
-                "       c.description AS description " +
-                "FROM shop.item AS i " +
-                "         JOIN category c ON i.category_id = c.id " +
-                "ORDER BY item_id";
+                "       i.category_id AS item_category_id " +
+                "FROM shop.item AS i ";
         public static final String CREATE = "" +
                 "INSERT INTO item (name, code, price, description, category_id) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        public static final String GET_BY_ID = "" +
-                "SELECT i.id          AS item_id, " +
-                "       i.name        AS item_name, " +
-                "       i.code        AS item_code, " +
-                "       i.price       AS item_price, " +
-                "       i.description AS item_description, " +
-                "       c.id          AS id, " +
-                "       c.name        AS name, " +
-                "       c.description AS description " +
-                "FROM shop.item AS i " +
-                "         JOIN category c ON i.category_id = c.id " +
-                "WHERE i.id = ?";
+        public static final String GET_BY_ID = FIND_ALL + " WHERE i.id = ?";
         public static final String UPDATE = "" +
                 "UPDATE item " +
                 "SET item.name        = ?, " +
@@ -184,6 +160,8 @@ public class QueryConstants {
                 "DELETE " +
                 "FROM shop.role AS role " +
                 "WHERE role.id = ?";
+        public static final String FIND_BY_NAME = FIND_ALL + " WHERE role.name = ?";
+        ;
     }
 
     public static class CART_ITEM {

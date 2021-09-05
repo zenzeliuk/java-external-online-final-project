@@ -9,7 +9,7 @@ public class Item extends BaseEntity {
     private String code;
     private BigDecimal price;
     private String description;
-    private Category category;
+    private int categoryId;
 
     public Item() {
         //POJO object
@@ -48,8 +48,8 @@ public class Item extends BaseEntity {
             return this;
         }
 
-        public Builder category(Category category) {
-            Item.this.category = category;
+        public Builder categoryId(int categoryId) {
+            Item.this.categoryId = categoryId;
             return this;
         }
 
@@ -91,12 +91,12 @@ public class Item extends BaseEntity {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -105,16 +105,16 @@ public class Item extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Item item = (Item) o;
-        return Objects.equals(name, item.name)
+        return categoryId == item.categoryId
+                && Objects.equals(name, item.name)
                 && Objects.equals(code, item.code)
                 && Objects.equals(price, item.price)
-                && Objects.equals(description, item.description)
-                && Objects.equals(category, item.category);
+                && Objects.equals(description, item.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, code, price, description, category);
+        return Objects.hash(super.hashCode(), name, code, price, description, categoryId);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class Item extends BaseEntity {
                 ", code='" + code + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
-                ", category=" + category +
+                ", categoryId=" + categoryId +
                 '}';
     }
 }

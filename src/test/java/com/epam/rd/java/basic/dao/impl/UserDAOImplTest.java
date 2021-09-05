@@ -28,9 +28,10 @@ class UserDAOImplTest {
     private static RoleDAO roleDAO;
     private static String sqlClearDB;
     private static String sqlCreateDB;
-    private static String sqlDropDB = "DROP SCHEMA IF EXISTS shop CASCADE";
+    private static String sqlDropDB;
     private static String pathSqlCreateDB = "sql/create_db.sql";
     private static String pathSqlClearDB = "sql/clear_db.sql";
+    private static String pathSqlDropDB = "sql/drop_db.sql";
 
     private Role userRole;
     private Role adminRole;
@@ -39,20 +40,25 @@ class UserDAOImplTest {
     @BeforeAll
     static void init() throws IOException, SQLException {
         ClassLoader classLoader = UserDAOImplTest.class.getClassLoader();
-        {
-            File fileCreateDB = new File(classLoader.getResource(pathSqlCreateDB).getFile());
-            BufferedReader readerCreateDB = new BufferedReader(new FileReader(fileCreateDB));
-            StringBuilder builderCreateDB = new StringBuilder();
-            readFromBuffer(readerCreateDB, builderCreateDB);
-            sqlCreateDB = builderCreateDB.toString();
-        }
-        {
-            File fileClearDB = new File(classLoader.getResource(pathSqlClearDB).getFile());
-            BufferedReader readerClearDB = new BufferedReader(new FileReader(fileClearDB));
-            StringBuilder builderClearDB = new StringBuilder();
-            readFromBuffer(readerClearDB, builderClearDB);
-            sqlClearDB = builderClearDB.toString();
-        }
+
+        File fileCreateDB = new File(classLoader.getResource(pathSqlCreateDB).getFile());
+        BufferedReader readerCreateDB = new BufferedReader(new FileReader(fileCreateDB));
+        StringBuilder builderCreateDB = new StringBuilder();
+        readFromBuffer(readerCreateDB, builderCreateDB);
+        sqlCreateDB = builderCreateDB.toString();
+
+        File fileClearDB = new File(classLoader.getResource(pathSqlClearDB).getFile());
+        BufferedReader readerClearDB = new BufferedReader(new FileReader(fileClearDB));
+        StringBuilder builderClearDB = new StringBuilder();
+        readFromBuffer(readerClearDB, builderClearDB);
+        sqlClearDB = builderClearDB.toString();
+
+        File fileDropDB = new File(classLoader.getResource(pathSqlDropDB).getFile());
+        BufferedReader readerDropDB = new BufferedReader(new FileReader(fileDropDB));
+        StringBuilder builderDropDB = new StringBuilder();
+        readFromBuffer(readerDropDB, builderDropDB);
+        sqlDropDB = builderDropDB.toString();
+
         userDAO = new UserDAOImpl(dbConnection.getConnection());
         roleDAO = new RoleDAOImpl(dbConnection.getConnection());
 
@@ -118,7 +124,6 @@ class UserDAOImplTest {
     void get() throws DaoException {
         int idMockUser = userDAO.create(userMock);
         userMock.setId(idMockUser);
-        System.out.println(idMockUser);
         User findUser = userDAO.get(idMockUser);
         assertEquals(userMock, findUser);
     }

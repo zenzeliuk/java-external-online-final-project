@@ -16,7 +16,6 @@ import java.util.List;
 @Log4j2
 public class CartServiceImpl implements CartService {
 
-
     private final DAOFactory daoFactory;
     private CartDAO cartDAO;
 

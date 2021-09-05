@@ -142,4 +142,24 @@ public class UserDAOImpl implements UserDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public User findByLogin(String login) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.FIND_BY_LOGIN);
+            preparedStatement.setString(1, login);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return getFromResultSet(resultSet);
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get user by login = '%s'. %s", login, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

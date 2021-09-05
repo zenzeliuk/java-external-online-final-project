@@ -112,4 +112,16 @@ public class UserServiceImpl implements UserService {
             dbConnection.close();
         }
     }
+
+    @Override
+    public User findByLogin(String login) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            return userDAO.findByLogin(login);
+        } catch (DaoException e) {
+            String exception = String.format("Cannot find user by login='%s'. %s", login, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
 }

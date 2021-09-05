@@ -35,4 +35,5 @@ public abstract class BaseEntity implements Serializable, Entity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

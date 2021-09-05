@@ -4,7 +4,6 @@ import com.epam.rd.java.basic.dao.ItemDAO;
 import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
-import com.epam.rd.java.basic.model.Category;
 import com.epam.rd.java.basic.model.Item;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,11 +46,6 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     private Item getFromResultSet(ResultSet resultSet) throws SQLException {
-        Category category = Category.builder()
-                .id(resultSet.getInt("id"))
-                .name(resultSet.getString("name"))
-                .description(resultSet.getString("description"))
-                .build();
         return Item
                 .builder()
                 .id(resultSet.getInt("item_id"))
@@ -59,7 +53,7 @@ public class ItemDAOImpl implements ItemDAO {
                 .code(resultSet.getString("item_code"))
                 .price(resultSet.getBigDecimal("item_price"))
                 .description(resultSet.getString("item_description"))
-                .category(category)
+                .categoryId(resultSet.getInt("item_category_id"))
                 .build();
     }
 
@@ -93,7 +87,7 @@ public class ItemDAOImpl implements ItemDAO {
         preparedStatement.setString(2, item.getCode());
         preparedStatement.setBigDecimal(3, item.getPrice());
         preparedStatement.setString(4, item.getDescription());
-        preparedStatement.setInt(5, item.getCategory().getId());
+        preparedStatement.setInt(5, item.getCategoryId());
     }
 
     @Override
