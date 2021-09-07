@@ -31,12 +31,12 @@ public class CartItem extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder cart(int cartId) {
+        public Builder cartId(int cartId) {
             CartItem.this.cartId = cartId;
             return this;
         }
 
-        public Builder item(int itemId) {
+        public Builder itemId(int itemId) {
             CartItem.this.itemId = itemId;
             return this;
         }

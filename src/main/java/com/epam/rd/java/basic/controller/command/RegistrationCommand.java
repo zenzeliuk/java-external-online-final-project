@@ -29,7 +29,7 @@ public class RegistrationCommand extends Command {
         String error;
         if (login == null || password == null || login.isBlank() || password.isBlank()) {
             error = "One or more of the input boxes were blank. Try again.";
-            request.setAttribute(AttributeConstant.ERROR, error);
+            session.setAttribute(AttributeConstant.ERROR, error);
             return Path.ERROR_PAGE;
         }
 
@@ -44,7 +44,7 @@ public class RegistrationCommand extends Command {
             userFromDB = userService.findByLogin(login);
             if (userFromDB != null) {
                 error = "This user login is already taken.";
-                request.setAttribute(AttributeConstant.ERROR, error);
+                session.setAttribute(AttributeConstant.ERROR, error);
                 return Path.ERROR_PAGE;
             }
         } catch (ServiceException e) {
@@ -56,7 +56,7 @@ public class RegistrationCommand extends Command {
         } catch (ServiceException e) {
             log.error("Role user was not find from DB." + e.getMessage());
             error = "Something went wrong, please repeat later.";
-            request.setAttribute(AttributeConstant.ERROR, error);
+            session.setAttribute(AttributeConstant.ERROR, error);
             return Path.ERROR_PAGE;
         }
 
@@ -71,7 +71,7 @@ public class RegistrationCommand extends Command {
             return Path.HOME_PAGE;
         } catch (ServiceException e) {
             error = "Something went wrong, please repeat later.";
-            request.setAttribute(AttributeConstant.ERROR, error);
+            session.setAttribute(AttributeConstant.ERROR, error);
             return Path.ERROR_PAGE;
         }
     }

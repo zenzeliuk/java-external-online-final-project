@@ -12,6 +12,7 @@ public class CommandList {
         commandMap.put("logout", new LogoutCommand());
         commandMap.put("registration", new RegistrationCommand());
         commandMap.put("items", new ItemsCommand());
+        commandMap.put("add_to_cart", new AddToCartCommand());
     }
 
     public static Command parse(String commandFromParameter) {

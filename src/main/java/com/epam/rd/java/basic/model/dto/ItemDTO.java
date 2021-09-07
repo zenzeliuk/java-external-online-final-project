@@ -9,9 +9,8 @@ public class ItemDTO {
 
     private String id;
     private String name;
-    private String code;
     private String price;
     private String description;
-    private String categoryId;
+    private String category;
 
 }

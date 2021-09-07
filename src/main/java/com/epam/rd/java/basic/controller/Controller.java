@@ -21,7 +21,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        process(req, resp);
+        process2(req, resp);
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,4 +36,18 @@ public class Controller extends HttpServlet {
         }
 
     }
+
+    private void process2(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String commandKey = req.getParameter("command");
+        Command command = CommandList.parse(commandKey);
+        String view = command.execute(req, resp);
+
+        if (view != null) {
+            resp.sendRedirect(view);
+        }
+
+    }
+
+
 }

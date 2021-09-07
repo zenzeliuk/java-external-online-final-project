@@ -48,8 +48,8 @@ public class CartItemDAOImpl implements CartItemDAO {
     private CartItem getFromResultSet(ResultSet resultSet) throws SQLException {
         return CartItem.builder()
                 .id(resultSet.getInt("cart_item_id"))
-                .cart(resultSet.getInt("cart_id"))
-                .item(resultSet.getInt("item_id"))
+                .cartId(resultSet.getInt("cart_id"))
+                .itemId(resultSet.getInt("item_id"))
                 .price(resultSet.getBigDecimal("price"))
                 .countItem(resultSet.getInt("count_item"))
                 .createTime(resultSet.getTimestamp("create_time"))

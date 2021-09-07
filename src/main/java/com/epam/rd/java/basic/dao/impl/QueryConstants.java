@@ -59,9 +59,9 @@ public class QueryConstants {
 
     public static class CART {
         public static final String FIND_ALL = "" +
-                "SELECT cart.id            AS cart_id, " +
-                "       cart.create_time   AS cart_create_time, " +
-                "       cart.update_time   AS cart_update_time, " +
+                "SELECT cartId.id            AS cart_id, " +
+                "       cartId.create_time   AS cart_create_time, " +
+                "       cartId.update_time   AS cart_update_time, " +
                 "       status.id          AS status_id, " +
                 "       status.name        AS status_name, " +
                 "       customer.id        AS customer_id, " +
@@ -74,32 +74,37 @@ public class QueryConstants {
                 "       approved.password  AS user_approved_password, " +
                 "       approved_role.id   AS user_approved_role_id, " +
                 "       approved_role.name AS user_approved_role_name " +
-                "FROM shop.cart AS cart, " +
+                "FROM shop.cartId AS cartId, " +
                 "     shop.status AS status, " +
                 "     shop.user AS customer, " +
                 "     shop.user AS approved, " +
                 "     shop.role AS customer_role, " +
                 "     shop.role AS approved_role " +
-                "WHERE cart.user_id = customer.id " +
-                "  AND cart.status_id = status.id " +
-                "  AND cart.approved_cart_by = approved.id " +
+                "WHERE cartId.user_id = customer.id " +
+                "  AND cartId.status_id = status.id " +
+                "  AND cartId.approved_cart_by = approved.id " +
                 "  AND customer.role_id = customer_role.id " +
                 "  AND approved.role_id = approved_role.id";
         public static final String CREATE = "" +
-                "INSERT INTO cart (user_id, status_id, approved_cart_by) " +
+                "INSERT INTO cartId (user_id, status_id, approved_cart_by) " +
                 "VALUES (?, ?, ?)";
         public static final String GET_BY_ID = FIND_ALL +
-                "  AND cart.id = ?";
+                "  AND cartId.id = ?";
         public static final String UPDATE = "" +
-                "UPDATE cart " +
-                "SET cart.status_id        = ?, " +
-                "    cart.user_id          = ?, " +
-                "    cart.approved_cart_by = ? " +
-                "WHERE cart.id = ?";
+                "UPDATE cartId " +
+                "SET cartId.status_id        = ?, " +
+                "    cartId.user_id          = ?, " +
+                "    cartId.approved_cart_by = ? " +
+                "WHERE cartId.id = ?";
         public static final String DELETE_BY_ID = "" +
                 "DELETE " +
-                "FROM cart " +
-                "WHERE cart.id = ?";
+                "FROM cartId " +
+                "WHERE cartId.id = ?";
+        public static final String GET_ID_CART_BY_USER_ID = "" +
+                "SELECT cartId.id AS id " +
+                "FROM shop.cart AS cartId " +
+                "WHERE cartId.user_id = ? " +
+                "  AND cartId.status_id = ?";
     }
 
     public static class STATUS {
@@ -119,6 +124,7 @@ public class QueryConstants {
                 "DELETE " +
                 "FROM shop.status AS status " +
                 "WHERE status.id = ?";
+        public static final String GET_BY_NAME = FIND_ALL + " WHERE status.name = 'empty'";
     }
 
     public static class CATEGORY {

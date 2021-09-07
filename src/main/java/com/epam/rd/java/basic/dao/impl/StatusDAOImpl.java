@@ -132,4 +132,24 @@ public class StatusDAOImpl implements StatusDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public Status getByName(String name) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.STATUS.GET_BY_NAME);
+//            preparedStatement.setString(1, name);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return getFromResultSet(resultSet);
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get status by name = '%s'. %s", name, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

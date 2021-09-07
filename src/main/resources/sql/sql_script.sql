@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `shop`.`user`
 
 
 -- -----------------------------------------------------
--- Table `shop`.`cart`
+-- Table `shop`.`cartId`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `shop`.`cart`
 (

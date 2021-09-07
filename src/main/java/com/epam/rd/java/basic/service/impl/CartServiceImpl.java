@@ -1,6 +1,7 @@
 package com.epam.rd.java.basic.service.impl;
 
 import com.epam.rd.java.basic.dao.CartDAO;
+import com.epam.rd.java.basic.dao.StatusDAO;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
@@ -8,6 +9,8 @@ import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Cart;
+import com.epam.rd.java.basic.model.Status;
+import com.epam.rd.java.basic.model.User;
 import com.epam.rd.java.basic.service.CartService;
 import lombok.extern.log4j.Log4j2;
 
@@ -18,6 +21,7 @@ public class CartServiceImpl implements CartService {
 
     private final DAOFactory daoFactory;
     private CartDAO cartDAO;
+    private StatusDAO statusDAO;
 
     public CartServiceImpl() {
         daoFactory = new DAOFactoryImpl();
@@ -46,7 +50,7 @@ public class CartServiceImpl implements CartService {
             dbConnection.commit();
             return cart;
         } catch (DaoException e) {
-            String exception = "Cannot create cart. " + cart.toString() + e.getMessage();
+            String exception = "Cannot create cartId. " + cart.toString() + e.getMessage();
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
@@ -61,7 +65,7 @@ public class CartServiceImpl implements CartService {
             cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
             return cartDAO.get(id);
         } catch (DaoException e) {
-            String exception = String.format("Cannot get cart by id='%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get cartId by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new ServiceException(exception);
         }
@@ -81,7 +85,7 @@ public class CartServiceImpl implements CartService {
                 return false;
             }
         } catch (DaoException e) {
-            String exception = "Cannot update cart. " + cart.toString() + e.getMessage();
+            String exception = "Cannot update cartId. " + cart.toString() + e.getMessage();
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
@@ -104,12 +108,38 @@ public class CartServiceImpl implements CartService {
                 return false;
             }
         } catch (DaoException e) {
-            String exception = String.format("Cannot delete cart by id='%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete cartId by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             dbConnection.rollback();
             throw new ServiceException(exception);
         } finally {
             dbConnection.close();
+        }
+    }
+
+    @Override
+    public Cart getUserCartWithEmptyStatus(User user) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
+            statusDAO = daoFactory.getStatusDAO(dbConnection.getConnection());
+            Status status = statusDAO.getByName(Status.EMPTY.getName());
+            return cartDAO.getUserCartWithEmptyStatus(user.getId(), status.getId());
+        } catch (DaoException e) {
+            try {
+                Status status = statusDAO.getByName(Status.EMPTY.getName());
+                Cart cart = Cart.builder()
+                        .status(status)
+                        .customer(user)
+                        .build();
+                int idNewCart = cartDAO.create(cart);
+                cart.setId(idNewCart);
+                return cart;
+            } catch (DaoException ex) {
+                String exception = String.format("Cannot get cartId by user_id='%s'. %s", user, e.getMessage());
+                log.error(exception);
+                throw new ServiceException(exception);
+            }
+
         }
     }
 }

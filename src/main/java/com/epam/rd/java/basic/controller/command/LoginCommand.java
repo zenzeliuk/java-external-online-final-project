@@ -30,7 +30,7 @@ public class LoginCommand extends Command {
 
         if (login == null || password == null || login.isBlank() || password.isBlank()) {
             error = "One or more of the input boxes were blank. Try again.";
-            request.setAttribute(AttributeConstant.ERROR, error);
+            session.setAttribute(AttributeConstant.ERROR, error);
             return forward;
         }
 
@@ -41,7 +41,7 @@ public class LoginCommand extends Command {
             User user = userService.findByLogin(login);
             if (!user.getPassword().equals(password)) {
                 error = "Wrong password";
-                request.setAttribute(AttributeConstant.ERROR, error);
+                session.setAttribute(AttributeConstant.ERROR, error);
             } else {
                 session.setAttribute(AttributeConstant.USER, user);
                 forward = Path.HOME_PAGE;
@@ -49,7 +49,7 @@ public class LoginCommand extends Command {
             return forward;
         } catch (ServiceException e) {
             error = "No such user found";
-            request.setAttribute(AttributeConstant.ERROR, error);
+            session.setAttribute(AttributeConstant.ERROR, error);
             return forward;
         }
     }

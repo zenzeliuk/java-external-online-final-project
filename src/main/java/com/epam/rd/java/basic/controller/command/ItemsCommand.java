@@ -13,7 +13,6 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Log4j2
@@ -21,8 +20,6 @@ public class ItemsCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-
-        HttpSession session = request.getSession();
 
         String error;
 

@@ -39,7 +39,7 @@ public class CartDAOImpl implements CartDAO {
             }
             return resultList;
         } catch (SQLException e) {
-            String exception = "Cannot find all cart. " + e.getMessage();
+            String exception = "Cannot find all cartId. " + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -91,10 +91,10 @@ public class CartDAOImpl implements CartDAO {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else {
-                throw new DaoException("Cannot get generated cart id. ");
+                throw new DaoException("Cannot get generated cartId id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create cart. " + cart.toString() + e.getMessage();
+            String exception = "Cannot create cartId. " + cart.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -120,7 +120,7 @@ public class CartDAOImpl implements CartDAO {
             resultSet.next();
             return getFromResultSet(resultSet);
         } catch (SQLException e) {
-            String exception = String.format("Cannot get cart by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get cartId by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -138,7 +138,7 @@ public class CartDAOImpl implements CartDAO {
             preparedStatement.setInt(4, cart.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = "Cannot update cart. " + cart.toString() + e.getMessage();
+            String exception = "Cannot update cartId. " + cart.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -154,10 +154,33 @@ public class CartDAOImpl implements CartDAO {
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = String.format("Cannot delete cart by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete cartId by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
+
+    @Override
+    public Cart getUserCartWithEmptyStatus(int idUser, int idEmptyStatus) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_ID_CART_BY_USER_ID);
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, idEmptyStatus);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            Cart cart = get(resultSet.getInt("id"));
+            log.error(cart);
+            return cart;
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get empty cartId by user_id='%s'. %s", idUser, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
     }
