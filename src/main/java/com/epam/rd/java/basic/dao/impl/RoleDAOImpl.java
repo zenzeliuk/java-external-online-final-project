@@ -48,8 +48,8 @@ public class RoleDAOImpl implements RoleDAO {
 
     private Role getFromResultSet(ResultSet resultSet) throws SQLException {
         return Role.createRole(
-                resultSet.getString("role_name"),
-                resultSet.getInt("role_id"));
+                resultSet.getString("name"),
+                resultSet.getInt("id"));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class RoleDAOImpl implements RoleDAO {
                 throw new DaoException("Cannot get generated role id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create status. " + role.toString() + e.getMessage();
+            String exception = "Cannot create role. " + role.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {

@@ -128,8 +128,8 @@ public class CartServiceImpl implements CartService {
             try {
                 Status status = statusDAO.getByName(Status.EMPTY.getName());
                 Cart cart = Cart.builder()
-                        .status(status)
-                        .customer(user)
+                        .statusId(status)
+                        .user(user)
                         .build();
                 int idNewCart = cartDAO.create(cart);
                 cart.setId(idNewCart);

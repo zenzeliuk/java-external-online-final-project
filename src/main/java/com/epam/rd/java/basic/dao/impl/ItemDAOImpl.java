@@ -46,16 +46,20 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     private Item getFromResultSet(ResultSet resultSet) throws SQLException {
-        return Item
-                .builder()
-                .id(resultSet.getInt("item_id"))
-                .name(resultSet.getString("item_name"))
-                .code(resultSet.getString("item_code"))
-                .price(resultSet.getBigDecimal("item_price"))
-                .description(resultSet.getString("item_description"))
-                .categoryId(resultSet.getInt("item_category_id"))
+        return Item.builder()
+                .id(resultSet.getInt("id"))
+                .categoryId(resultSet.getInt("category_id"))
+                .brandId(resultSet.getInt("brand_id"))
+                .colorId(resultSet.getInt("color_id"))
+                .count(resultSet.getInt("count"))
+                .name(resultSet.getString("name"))
+                .image(resultSet.getString("image"))
+                .price(resultSet.getBigDecimal("price"))
+                .createTime(resultSet.getTimestamp("create_time"))
+                .updateTime(resultSet.getTimestamp("update_time"))
                 .build();
     }
+
 
     @Override
     public int create(Item item) throws DaoException {
@@ -83,11 +87,13 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     private void setPreparedStatementWithoutId(Item item, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, item.getName());
-        preparedStatement.setString(2, item.getCode());
-        preparedStatement.setBigDecimal(3, item.getPrice());
-        preparedStatement.setString(4, item.getDescription());
-        preparedStatement.setInt(5, item.getCategoryId());
+        preparedStatement.setInt(1, item.getCategoryId());
+        preparedStatement.setInt(2, item.getBrandId());
+        preparedStatement.setInt(3, item.getColorId());
+        preparedStatement.setInt(4, item.getCount());
+        preparedStatement.setString(5, item.getName());
+        preparedStatement.setString(6, item.getImage());
+        preparedStatement.setBigDecimal(7, item.getPrice());
     }
 
     @Override
@@ -116,7 +122,7 @@ public class ItemDAOImpl implements ItemDAO {
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.ITEM.UPDATE);
             setPreparedStatementWithoutId(item, preparedStatement);
-            preparedStatement.setInt(6, item.getId());
+            preparedStatement.setInt(8, item.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             String exception = "Cannot update item. " + item.toString() + e.getMessage();

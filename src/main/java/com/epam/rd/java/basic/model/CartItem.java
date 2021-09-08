@@ -15,7 +15,6 @@ public class CartItem extends BaseEntity implements Serializable {
     private Timestamp updateTime;
 
     public CartItem() {
-        //POJO object
     }
 
     public static Builder builder() {

@@ -6,11 +6,8 @@ import java.util.Objects;
 public class Category extends BaseEntity implements Serializable {
 
     private String name;
-    private String description;
-    private Integer parentCategory;
 
     public Category() {
-        //POJO object
     }
 
     public static Builder builder() {
@@ -31,16 +28,6 @@ public class Category extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder description(String description) {
-            Category.this.description = description;
-            return this;
-        }
-
-        public Builder parentCategory(Integer parentCategory) {
-            Category.this.parentCategory = parentCategory;
-            return this;
-        }
-
         public Category build() {
             return Category.this;
         }
@@ -55,43 +42,25 @@ public class Category extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getParentCategory() {
-        return parentCategory;
-    }
-
-    public void setParentCategory(int parentCategory) {
-        this.parentCategory = parentCategory;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Category category = (Category) o;
-        return Objects.equals(name, category.name) && Objects.equals(description, category.description) && Objects.equals(parentCategory, category.parentCategory);
+        return Objects.equals(name, category.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, description, parentCategory);
+        return Objects.hash(super.hashCode(), name);
     }
 
     @Override
     public String toString() {
         return "Category{" +
                 "id='" + getId() + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", parentCategory=" + parentCategory +
+                ", name='" + name +
                 '}';
     }
 }

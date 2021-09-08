@@ -7,7 +7,7 @@ public class User extends BaseEntity implements Serializable {
 
     private String login;
     private String password;
-    private Role role;
+    private int roleId;
 
     public User() {
         //POJO object
@@ -36,8 +36,8 @@ public class User extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder role(Role role) {
-            User.this.role = role;
+        public Builder roleId(int roleId) {
+            User.this.roleId = roleId;
             return this;
         }
 
@@ -62,12 +62,12 @@ public class User extends BaseEntity implements Serializable {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     @Override
@@ -76,14 +76,12 @@ public class User extends BaseEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(login, user.login)
-                && Objects.equals(password, user.password)
-                && role == user.role;
+        return roleId == user.roleId && Objects.equals(login, user.login) && Objects.equals(password, user.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), login, password, role);
+        return Objects.hash(super.hashCode(), login, password, roleId);
     }
 
     @Override
@@ -92,7 +90,7 @@ public class User extends BaseEntity implements Serializable {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
+                ", roleId=" + roleId +
                 '}';
     }
 }

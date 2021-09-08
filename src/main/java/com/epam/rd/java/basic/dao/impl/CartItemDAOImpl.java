@@ -47,15 +47,16 @@ public class CartItemDAOImpl implements CartItemDAO {
 
     private CartItem getFromResultSet(ResultSet resultSet) throws SQLException {
         return CartItem.builder()
-                .id(resultSet.getInt("cart_item_id"))
-                .cartId(resultSet.getInt("cart_id"))
+                .id(resultSet.getInt("id"))
+                .cartId(resultSet.getInt("card_id"))
                 .itemId(resultSet.getInt("item_id"))
                 .price(resultSet.getBigDecimal("price"))
-                .countItem(resultSet.getInt("count_item"))
+                .countItem(resultSet.getInt("count"))
                 .createTime(resultSet.getTimestamp("create_time"))
                 .updateTime(resultSet.getTimestamp("update_time"))
                 .build();
     }
+
 
     @Override
     public int create(CartItem cartItem) throws DaoException {
@@ -88,6 +89,7 @@ public class CartItemDAOImpl implements CartItemDAO {
         preparedStatement.setBigDecimal(3, cartItem.getPrice());
         preparedStatement.setInt(4, cartItem.getCountItem());
     }
+
 
     @Override
     public CartItem get(int id) throws DaoException {

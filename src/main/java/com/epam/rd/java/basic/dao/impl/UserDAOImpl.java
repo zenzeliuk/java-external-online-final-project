@@ -4,7 +4,6 @@ import com.epam.rd.java.basic.dao.UserDAO;
 import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
-import com.epam.rd.java.basic.model.Role;
 import com.epam.rd.java.basic.model.User;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,15 +46,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private User getFromResultSet(ResultSet resultSet) throws SQLException {
-        Role role = Role.createRole(
-                resultSet.getString("name"),
-                resultSet.getInt("role_id"));
         return User
                 .builder()
                 .id(resultSet.getInt("id"))
                 .login(resultSet.getString("login"))
                 .password(resultSet.getString("password"))
-                .role(role)
+                .roleId(resultSet.getInt("role_id"))
                 .build();
     }
 
@@ -87,7 +83,7 @@ public class UserDAOImpl implements UserDAO {
     private void setPreparedStatementWithoutId(User user, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, user.getLogin());
         preparedStatement.setString(2, user.getPassword());
-        preparedStatement.setInt(3, user.getRole().getId());
+        preparedStatement.setInt(3, user.getRoleId());
     }
 
     @Override

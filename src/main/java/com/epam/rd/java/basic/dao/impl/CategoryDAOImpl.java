@@ -47,9 +47,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     private Category getFromResultSet(ResultSet resultSet) throws SQLException {
         return Category.builder()
-                .id(resultSet.getInt("category_id"))
-                .description(resultSet.getString("category_description"))
-                .parentCategory(resultSet.getInt("parent_id"))
+                .id(resultSet.getInt("id"))
+                .name(resultSet.getString("name"))
                 .build();
     }
 
@@ -80,8 +79,6 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     private void setPreparedStatementWithoutId(Category category, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, category.getName());
-        preparedStatement.setInt(2, category.getParentCategory());
-        preparedStatement.setString(3, category.getDescription());
     }
 
     @Override
@@ -110,7 +107,7 @@ public class CategoryDAOImpl implements CategoryDAO {
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.CATEGORY.UPDATE);
             setPreparedStatementWithoutId(category, preparedStatement);
-            preparedStatement.setInt(4, category.getId());
+            preparedStatement.setInt(2, category.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             String exception = "Cannot update category. " + category.toString() + e.getMessage();

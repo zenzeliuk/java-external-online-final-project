@@ -17,7 +17,7 @@ public class ItemMapper {
                 .id(String.valueOf(item.getId()))
                 .name(item.getName())
                 .price(String.valueOf(item.getPrice()))
-                .description(item.getDescription())
+                .description(item.getColorId())
                 .build();
     }
 

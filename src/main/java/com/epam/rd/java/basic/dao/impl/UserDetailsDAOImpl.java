@@ -47,7 +47,7 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
 
     private UserDetails getFromResultSet(ResultSet resultSet) throws SQLException {
         return UserDetails.builder()
-                .userId(resultSet.getInt("user_id"))
+                .userId(resultSet.getInt("id"))
                 .firstName(resultSet.getString("firs_name"))
                 .lastName(resultSet.getString("last_name"))
                 .email(resultSet.getString("email"))

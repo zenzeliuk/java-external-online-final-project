@@ -47,8 +47,8 @@ public class StatusDAOImpl implements StatusDAO {
 
     private Status getFromResultSet(ResultSet resultSet) throws SQLException {
         return Status.createStatus(
-                resultSet.getString("status_name"),
-                resultSet.getInt("status_id"));
+                resultSet.getString("name"),
+                resultSet.getInt("id"));
     }
 
     @Override
@@ -139,7 +139,7 @@ public class StatusDAOImpl implements StatusDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.STATUS.GET_BY_NAME);
-//            preparedStatement.setString(1, name);
+            preparedStatement.setString(1, name);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return getFromResultSet(resultSet);

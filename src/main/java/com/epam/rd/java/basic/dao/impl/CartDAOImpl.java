@@ -5,9 +5,6 @@ import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.model.Cart;
-import com.epam.rd.java.basic.model.Role;
-import com.epam.rd.java.basic.model.Status;
-import com.epam.rd.java.basic.model.User;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
@@ -39,7 +36,7 @@ public class CartDAOImpl implements CartDAO {
             }
             return resultList;
         } catch (SQLException e) {
-            String exception = "Cannot find all cartId. " + e.getMessage();
+            String exception = "Cannot find all cart. " + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -49,32 +46,12 @@ public class CartDAOImpl implements CartDAO {
     }
 
     private Cart getFromResultSet(ResultSet resultSet) throws SQLException {
-        Status status = Status.createStatus(
-                resultSet.getString("status_name"),
-                resultSet.getInt("status_id"));
-        User customer = User.builder()
-                .id(resultSet.getInt("customer_id"))
-                .login(resultSet.getString("customer_login"))
-                .password(resultSet.getString("customer_password"))
-                .role(Role.createRole(
-                        resultSet.getString("customer_role_name"),
-                        resultSet.getInt("customer_role_id")))
-                .build();
-        User userApproved = User.builder()
-                .id(resultSet.getInt("user_approved_id"))
-                .login(resultSet.getString("user_approved_login"))
-                .password(resultSet.getString("user_approved_password"))
-                .role(Role.createRole(
-                        resultSet.getString("user_approved_role_name"),
-                        resultSet.getInt("user_approved_role_id")))
-                .build();
         return Cart.builder()
-                .id(resultSet.getInt("cart_id"))
-                .status(status)
-                .customer(customer)
-                .userApproved(userApproved)
-                .createTime(resultSet.getTimestamp("cart_create_time"))
-                .updateTime(resultSet.getTimestamp("cart_update_time"))
+                .id(resultSet.getInt("id"))
+                .userId(resultSet.getInt("user_id"))
+                .statusId(resultSet.getInt("status_id"))
+                .createTime(resultSet.getTimestamp("create_time"))
+                .updateTime(resultSet.getTimestamp("update_time"))
                 .build();
     }
 
@@ -94,7 +71,7 @@ public class CartDAOImpl implements CartDAO {
                 throw new DaoException("Cannot get generated cartId id. ");
             }
         } catch (SQLException e) {
-            String exception = "Cannot create cartId. " + cart.toString() + e.getMessage();
+            String exception = "Cannot create cart. " + cart.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -104,9 +81,8 @@ public class CartDAOImpl implements CartDAO {
     }
 
     private void setPreparedStatementWithoutId(Cart cart, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1, cart.getStatus().getId());
-        preparedStatement.setInt(2, cart.getCustomer().getId());
-        preparedStatement.setInt(3, cart.getUserApproved().getId());
+        preparedStatement.setInt(1, cart.getUserId());
+        preparedStatement.setInt(2, cart.getStatusId());
     }
 
     @Override
@@ -120,7 +96,7 @@ public class CartDAOImpl implements CartDAO {
             resultSet.next();
             return getFromResultSet(resultSet);
         } catch (SQLException e) {
-            String exception = String.format("Cannot get cartId by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot get cart by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -135,10 +111,10 @@ public class CartDAOImpl implements CartDAO {
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.CART.UPDATE);
             setPreparedStatementWithoutId(cart, preparedStatement);
-            preparedStatement.setInt(4, cart.getId());
+            preparedStatement.setInt(3, cart.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = "Cannot update cartId. " + cart.toString() + e.getMessage();
+            String exception = "Cannot update cart. " + cart.toString() + e.getMessage();
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -154,7 +130,7 @@ public class CartDAOImpl implements CartDAO {
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            String exception = String.format("Cannot delete cartId by id = '%s'. %s", id, e.getMessage());
+            String exception = String.format("Cannot delete cart by id = '%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new DaoException(exception);
         } finally {
@@ -162,26 +138,4 @@ public class CartDAOImpl implements CartDAO {
         }
     }
 
-    @Override
-    public Cart getUserCartWithEmptyStatus(int idUser, int idEmptyStatus) throws DaoException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_ID_CART_BY_USER_ID);
-            preparedStatement.setInt(1, idUser);
-            preparedStatement.setInt(2, idEmptyStatus);
-            resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            Cart cart = get(resultSet.getInt("id"));
-            log.error(cart);
-            return cart;
-        } catch (SQLException e) {
-            String exception = String.format("Cannot get empty cartId by user_id='%s'. %s", idUser, e.getMessage());
-            log.error(exception);
-            throw new DaoException(exception);
-        } finally {
-            close.closeResultSet(resultSet);
-            close.closePrepareStatement(preparedStatement);
-        }
-    }
 }

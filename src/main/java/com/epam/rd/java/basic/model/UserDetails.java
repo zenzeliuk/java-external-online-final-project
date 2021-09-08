@@ -13,7 +13,6 @@ public class UserDetails extends BaseEntity implements Serializable {
     private int age;
 
     public UserDetails() {
-        //POJO object
     }
 
     public static Builder builder() {

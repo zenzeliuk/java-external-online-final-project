@@ -6,14 +6,12 @@ import java.util.Objects;
 
 public class Cart extends BaseEntity implements Serializable {
 
-    private Status status;
-    private User customer;
-    private User userApproved;
+    private int statusId;
+    private int userId;
     private Timestamp createTime;
     private Timestamp updateTime;
 
     public Cart() {
-        //POJO object
     }
 
     public static Builder builder() {
@@ -29,18 +27,13 @@ public class Cart extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder status(Status status) {
-            Cart.this.status = status;
+        public Builder statusId(int statusId) {
+            Cart.this.statusId = statusId;
             return this;
         }
 
-        public Builder customer(User customer) {
-            Cart.this.customer = customer;
-            return this;
-        }
-
-        public Builder userApproved(User userApproved) {
-            Cart.this.userApproved = userApproved;
+        public Builder userId(int userId) {
+            Cart.this.userId = userId;
             return this;
         }
 
@@ -59,28 +52,20 @@ public class Cart extends BaseEntity implements Serializable {
         }
     }
 
-    public Status getStatus() {
-        return status;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
-    public User getCustomer() {
-        return customer;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCustomer(User customer) {
-        this.customer = customer;
-    }
-
-    public User getUserApproved() {
-        return userApproved;
-    }
-
-    public void setUserApproved(User userApproved) {
-        this.userApproved = userApproved;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public Timestamp getCreateTime() {
@@ -105,25 +90,20 @@ public class Cart extends BaseEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Cart cart = (Cart) o;
-        return status == cart.status
-                && Objects.equals(customer, cart.customer)
-                && Objects.equals(userApproved, cart.userApproved)
-                && Objects.equals(createTime, cart.createTime)
-                && Objects.equals(updateTime, cart.updateTime);
+        return statusId == cart.statusId && userId == cart.userId && Objects.equals(createTime, cart.createTime) && Objects.equals(updateTime, cart.updateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), status, customer, userApproved, createTime, updateTime);
+        return Objects.hash(super.hashCode(), statusId, userId, createTime, updateTime);
     }
 
     @Override
     public String toString() {
         return "Cart{" +
-                "id=" + getId() +
-                ", status=" + status +
-                ", customer=" + customer +
-                ", userApproved=" + userApproved +
+                "id=" + id +
+                ", statusId=" + statusId +
+                ", userId=" + userId +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
