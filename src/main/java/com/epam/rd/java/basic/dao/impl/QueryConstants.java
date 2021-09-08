@@ -15,6 +15,16 @@ public class QueryConstants {
                 "    shop.cart.status_id   = ? " +
                 "WHERE shop.cart.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.cart WHERE shop.cart.id = ?";
+        public static final String GET_EMPTY_CART_BY_USER_ID = "" +
+                "SELECT c.id          AS id, " +
+                "       c.user_id     AS user_id, " +
+                "       c.status_id   AS status_id, " +
+                "       c.create_time AS create_time, " +
+                "       c.update_time AS update_time " +
+                "FROM shop.cart AS c " +
+                "         JOIN shop.status AS s ON c.status_id = s.id " +
+                "WHERE c.user_id = ? " +
+                "  AND s.name = ?";
     }
 
     public static class CART_ITEM {

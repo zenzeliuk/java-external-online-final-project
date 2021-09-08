@@ -9,6 +9,11 @@ import java.sql.Connection;
 public class DAOFactoryImpl implements DAOFactory {
 
     @Override
+    public BrandDAO getBrandDAO(Connection connection) {
+        return new BrandDAOImpl(connection);
+    }
+
+    @Override
     public CartDAO getCartDAO(Connection connection) {
         return new CartDAOImpl(connection);
     }
@@ -21,6 +26,11 @@ public class DAOFactoryImpl implements DAOFactory {
     @Override
     public CategoryDAO getCategoryDAO(Connection connection) {
         return new CategoryDAOImpl(connection);
+    }
+
+    @Override
+    public ColorDAO getColorDAO(Connection connection) {
+        return new ColorDAOImpl(connection);
     }
 
     @Override

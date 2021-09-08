@@ -10,7 +10,6 @@ import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Cart;
 import com.epam.rd.java.basic.model.Status;
-import com.epam.rd.java.basic.model.User;
 import com.epam.rd.java.basic.service.CartService;
 import lombok.extern.log4j.Log4j2;
 
@@ -118,28 +117,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getUserCartWithEmptyStatus(User user) throws ServiceException {
+    public Cart getCartByUserIdAndStatusId(int idUser, String nameStatus) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
             cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
             statusDAO = daoFactory.getStatusDAO(dbConnection.getConnection());
-            Status status = statusDAO.getByName(Status.EMPTY.getName());
-            return cartDAO.getUserCartWithEmptyStatus(user.getId(), status.getId());
+            return cartDAO.getCartByUserIdAndStatusId(idUser, nameStatus);
         } catch (DaoException e) {
-            try {
-                Status status = statusDAO.getByName(Status.EMPTY.getName());
-                Cart cart = Cart.builder()
-                        .statusId(status)
-                        .user(user)
-                        .build();
-                int idNewCart = cartDAO.create(cart);
-                cart.setId(idNewCart);
-                return cart;
-            } catch (DaoException ex) {
-                String exception = String.format("Cannot get cartId by user_id='%s'. %s", user, e.getMessage());
-                log.error(exception);
-                throw new ServiceException(exception);
-            }
-
+            String exception = String.format("Cannot get cart by user_id='%s' and status='%s'. %s", idUser, nameStatus, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
         }
     }
 }

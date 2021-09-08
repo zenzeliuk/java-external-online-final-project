@@ -84,7 +84,7 @@ class UserDAOImplTest {
         userMock = User.builder()
                 .login("login_test")
                 .password("password_test")
-                .role(userRole)
+//                .role(userRole)
                 .build();
     }
 
@@ -135,13 +135,13 @@ class UserDAOImplTest {
                 .id(idUser)
                 .login("update_login")
                 .password("update_login")
-                .role(adminRole)
+//                .role(adminRole)
                 .build();
         User notCorrectUser = User.builder()
                 .id(0)
                 .login("0")
                 .password("0")
-                .role(adminRole)
+//                .role(adminRole)
                 .build();
 
         User beforeUpdateUser = userDAO.get(idUser);

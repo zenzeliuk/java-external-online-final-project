@@ -5,9 +5,11 @@ import com.epam.rd.java.basic.controller.Path;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Cart;
 import com.epam.rd.java.basic.model.CartItem;
+import com.epam.rd.java.basic.model.Status;
 import com.epam.rd.java.basic.model.User;
 import com.epam.rd.java.basic.service.CartItemService;
 import com.epam.rd.java.basic.service.CartService;
+import com.epam.rd.java.basic.service.StatusService;
 import com.epam.rd.java.basic.service.factory.ServiceFactory;
 import com.epam.rd.java.basic.service.factory.impl.ServiceFactoryImpl;
 
@@ -32,6 +34,7 @@ public class AddToCartCommand extends Command {
         ServiceFactory factory = new ServiceFactoryImpl();
         CartService cartService = factory.getCartService();
         CartItemService cartItemService = factory.getCartItemService();
+        StatusService statusService = factory.getStatusService();
         String error;
 
         if (user == null) {
@@ -42,17 +45,26 @@ public class AddToCartCommand extends Command {
 
         if (cart == null) {
             try {
-                cart = cartService.getUserCartWithEmptyStatus(user);
+                cart = cartService.getCartByUserIdAndStatusId(user.getId(), Status.EMPTY.getName());
             } catch (ServiceException e) {
-                error = "Cannot get cartId.";
-                session.setAttribute(AttributeConstant.ERROR, error);
-                return Path.ERROR_PAGE;
+                try {
+                    Status status = statusService.getByName(Status.EMPTY.getName());
+                    Cart newCart = Cart.builder()
+                            .statusId(status.getId())
+                            .userId(user.getId())
+                            .build();
+                    cart = cartService.create(newCart);
+                } catch (ServiceException serviceException) {
+                    error = "Cannot create new cart with empty status.";
+                    session.setAttribute(AttributeConstant.ERROR, error);
+                    return Path.ERROR_PAGE;
+                }
             }
         }
 
         CartItem cartItem = CartItem.builder()
                 .cartId(cart.getId())
-                .itemId(Integer.valueOf(idItem))
+                .itemId(Integer.parseInt(idItem))
                 .price(priceItem)
                 .countItem(count)
                 .build();

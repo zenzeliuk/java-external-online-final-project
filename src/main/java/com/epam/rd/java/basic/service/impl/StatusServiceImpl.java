@@ -112,4 +112,16 @@ public class StatusServiceImpl implements StatusService {
             dbConnection.close();
         }
     }
+
+    @Override
+    public Status getByName(String name) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            statusDAO = daoFactory.getStatusDAO(dbConnection.getConnection());
+            return statusDAO.getByName(name);
+        } catch (DaoException e) {
+            String exception = String.format("Cannot get status by name='%s'. %s", name, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
 }

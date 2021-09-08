@@ -138,4 +138,24 @@ public class CartDAOImpl implements CartDAO {
         }
     }
 
+    @Override
+    public Cart getCartByUserIdAndStatusId(int idUser, String nameStatus) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_EMPTY_CART_BY_USER_ID);
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setString(2, nameStatus);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return getFromResultSet(resultSet);
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get cart by user_id='%s' and status='%s'. %s", idUser, nameStatus, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

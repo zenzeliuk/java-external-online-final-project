@@ -63,7 +63,7 @@ public class RegistrationCommand extends Command {
         User user = User.builder()
                 .login(login)
                 .password(password)
-                .role(role)
+                .roleId(role.getId())
                 .build();
         try {
             userService.create(user);

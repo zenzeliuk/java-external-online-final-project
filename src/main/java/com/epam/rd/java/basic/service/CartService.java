@@ -5,5 +5,6 @@ import com.epam.rd.java.basic.model.Cart;
 import com.epam.rd.java.basic.model.User;
 
 public interface CartService extends AbstractService<Cart>{
-    Cart getUserCartWithEmptyStatus(User user) throws ServiceException;
+
+    Cart getCartByUserIdAndStatusId(int idUser, String nameStatus) throws ServiceException;
 }
