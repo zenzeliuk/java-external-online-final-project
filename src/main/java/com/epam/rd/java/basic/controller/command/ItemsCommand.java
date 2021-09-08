@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Log4j2
@@ -20,6 +21,8 @@ public class ItemsCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+
+        HttpSession session = request.getSession();
 
         String error;
 
@@ -29,7 +32,7 @@ public class ItemsCommand extends Command {
         try {
             List<Item> itemList = itemService.findAll();
             List<ItemDTO> itemDTOList = ItemMapper.toItemDTOList(itemList);
-            request.setAttribute("items", itemDTOList);
+            session.setAttribute("items", itemDTOList);
             return Path.ITEM_PAGE;
         } catch (ServiceException e) {
             log.error("Can not find all items" + e.getMessage());
