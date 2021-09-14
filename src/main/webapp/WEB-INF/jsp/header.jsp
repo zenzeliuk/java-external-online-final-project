@@ -18,7 +18,12 @@
         </li>
         <c:if test="${sessionScope.role.name() == ADMIN}">
             <li>
-                <a href="${pageContext.request.contextPath}/admin/admin"><fmt:message key="h.admin"/></a>
+                <a href="${pageContext.request.contextPath}/admin/home"><fmt:message key="h.admin"/></a>
+            </li>
+        </c:if>
+        <c:if test="${sessionScope.role.name() == USER || sessionScope.role.name() == ADMIN}">
+            <li>
+                <a href="${pageContext.request.contextPath}/user/home"><fmt:message key="h.user"/></a>
             </li>
         </c:if>
         <c:choose>

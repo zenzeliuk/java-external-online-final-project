@@ -1,12 +1,14 @@
 package com.epam.rd.java.basic.controller;
 
 import com.epam.rd.java.basic.controller.annotations.Action;
+import com.epam.rd.java.basic.controller.command.admin.AdminHomeCommandGET;
 import com.epam.rd.java.basic.controller.command.auth.*;
 import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
 import com.epam.rd.java.basic.controller.command.cart.EditCountItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.AddItemToCartCommandPOST;
 import com.epam.rd.java.basic.controller.command.item.ItemsCommandGET;
+import com.epam.rd.java.basic.controller.command.user.UserHomeCommandGET;
 
 public enum ActionCommandEnum {
 
@@ -76,6 +78,20 @@ public enum ActionCommandEnum {
     EDIT_COUNT_ITEM_CART {
         {
             this.command = new EditCountItemCommandGET();
+        }
+    },
+
+    @Action(url = "/admin/home", method = "GET")
+    ADMIN_HOME {
+        {
+            this.command = new AdminHomeCommandGET();
+        }
+    },
+
+    @Action(url = "/user/home", method = "GET")
+   USER_HOME {
+        {
+            this.command = new UserHomeCommandGET();
         }
     },
 

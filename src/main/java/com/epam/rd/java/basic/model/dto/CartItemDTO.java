@@ -7,9 +7,9 @@ import lombok.Data;
 @Builder
 public class CartItemDTO {
 
-    String id;
-    String itemName;
-    String price;
-    String count;
+    private String id;
+    private String itemName;
+    private String price;
+    private String count;
 
 }

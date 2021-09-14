@@ -13,7 +13,6 @@ public class DBConnectionPool {
     private static final HikariDataSource dataSource;
 
     private DBConnectionPool() {
-        //private constructor
     }
 
     static {

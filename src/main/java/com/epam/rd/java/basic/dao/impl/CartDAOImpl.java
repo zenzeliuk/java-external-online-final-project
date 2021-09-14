@@ -5,6 +5,7 @@ import com.epam.rd.java.basic.dao.util.CloseResources;
 import com.epam.rd.java.basic.dao.util.impl.CloseResourcesImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.model.Cart;
+import com.epam.rd.java.basic.model.dto.CartDTO;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
@@ -157,5 +158,46 @@ public class CartDAOImpl implements CartDAO {
             close.closeResultSet(resultSet);
             close.closePrepareStatement(preparedStatement);
         }
+    }
+/*
+  List<Cart> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.FIND_ALL);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Cart result = getFromResultSet(resultSet);
+                resultList.add(result);
+            }
+            return resultList;
+ */
+    @Override
+    public List<CartDTO> findAllByUserId(int id) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            List<CartDTO> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.FIND_ALL_BY_USER_ID);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CartDTO result = getCartDTOFromResultSet(resultSet);
+                resultList.add(result);
+            }
+            return resultList;
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get list cart by user_id='%s'. %s", id, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
+    private CartDTO getCartDTOFromResultSet(ResultSet resultSet) throws SQLException {
+        return CartDTO.builder()
+                .id(String.valueOf(resultSet.getInt("id")))
+                .statusName(resultSet.getString("status"))
+                .createTime(resultSet.getTimestamp("create_time"))
+                .updateTime(resultSet.getTimestamp("update_time"))
+                .build();
     }
 }

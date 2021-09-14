@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "main", urlPatterns = {"/login/*", "/admin/*", "/app/*"})
+@WebServlet(name = "main", urlPatterns = {"/login/*", "/admin/*", "/app/*", "/user/*"})
 public class Controller extends HttpServlet {
 
     @Override

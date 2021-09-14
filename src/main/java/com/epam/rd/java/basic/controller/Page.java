@@ -35,6 +35,7 @@ public class Page {
 
         HOME("/"),
         ITEMS("/app/item"),
+        LOGIN("/login/sign-in"),
         CART("/app/cart");
 
         private final String path;

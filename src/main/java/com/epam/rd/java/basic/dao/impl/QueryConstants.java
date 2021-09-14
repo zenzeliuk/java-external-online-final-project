@@ -25,6 +25,14 @@ public class QueryConstants {
                 "         JOIN shop.status AS s ON c.status_id = s.id " +
                 "WHERE c.user_id = ? " +
                 "  AND s.name = ?";
+        public static final String FIND_ALL_BY_USER_ID = "" +
+                "SELECT c.id          AS id, " +
+                "       s.name        AS status, " +
+                "       c.create_time AS create_time, " +
+                "       c.update_time AS update_time " +
+                "FROM shop.cart AS c " +
+                "         JOIN status s on s.id = c.status_id " +
+                "WHERE c.user_id = ? ";
     }
 
     public static class CART_ITEM {
