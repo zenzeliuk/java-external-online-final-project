@@ -6,4 +6,6 @@ import com.epam.rd.java.basic.model.Role;
 public interface RoleDAO extends AbstractDAO<Role>{
 
     Role findByName(String name) throws DaoException;
+
+    Role findById(int roleId) throws DaoException;
 }

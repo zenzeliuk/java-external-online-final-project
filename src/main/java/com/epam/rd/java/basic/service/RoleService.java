@@ -5,4 +5,6 @@ import com.epam.rd.java.basic.model.Role;
 
 public interface RoleService extends AbstractService<Role> {
     Role findByName(String name) throws ServiceException;
+
+    Role findById(int roleId) throws ServiceException;
 }

@@ -62,15 +62,10 @@ public class UserDetailsDAOImpl implements UserDetailsDAO {
         ResultSet resultSet = null;
         try {
             preparedStatement = connection.prepareStatement
-                    (QueryConstants.USER_DETAILS.CREATE, Statement.RETURN_GENERATED_KEYS);
+                    (QueryConstants.USER_DETAILS.CREATE);
             setPreparedStatementWithoutId(userDetails, preparedStatement);
             preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                throw new DaoException("Cannot get generated user_details id. ");
-            }
+            return userDetails.getId();
         } catch (SQLException e) {
             String exception = "Cannot create user_details. " + userDetails.toString() + e.getMessage();
             log.error(exception);

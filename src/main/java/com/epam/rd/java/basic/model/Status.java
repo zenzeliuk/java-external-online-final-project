@@ -7,7 +7,7 @@ public enum Status implements Serializable, Entity {
     REGISTERED("registered"),
     PAID("paid"),
     CANCELED("canceled"),
-    EMPTY("empty");
+    OPEN("open");
 
     private int id;
     private final String name;
@@ -37,7 +37,7 @@ public enum Status implements Serializable, Entity {
     }
 
     public static Status createStatus(String name, int id) {
-        Status status = EMPTY;
+        Status status = OPEN;
         if (name == null) {
             return status;
         }

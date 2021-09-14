@@ -143,4 +143,28 @@ public class CartItemDAOImpl implements CartItemDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public List<CartItem> findAllByCartId(int id) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            List<CartItem> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.CART_ITEM.FIND_ALL_BY_CART_ID);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                CartItem result = getFromResultSet(resultSet);
+                resultList.add(result);
+            }
+            return resultList;
+        } catch (SQLException e) {
+            String exception = String.format("Cannot find list cart_item by cart id='%s'. %s", id, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

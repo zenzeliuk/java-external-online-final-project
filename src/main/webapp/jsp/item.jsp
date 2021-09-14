@@ -9,7 +9,7 @@
     <title>Title</title>
 </head>
 <body>
-<jsp:include page="head.jsp"/>
+<jsp:include page="../WEB-INF/jsp/header.jsp"/>
 
 <div class="container d-flex justify-content-center mt-50 mb-50">
     <div class="row">

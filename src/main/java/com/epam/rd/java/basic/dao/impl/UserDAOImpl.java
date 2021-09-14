@@ -158,4 +158,25 @@ public class UserDAOImpl implements UserDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public User findByLoginAndPassword(String login, String password) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.FIND_BY_LOGIN_AND_PASSWORD);
+            preparedStatement.setString(1, login);
+            preparedStatement.setString(2, password);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return getFromResultSet(resultSet);
+        } catch (SQLException e) {
+            String exception = String.format("Cannot get user by login = '%s' and password. %s", login, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

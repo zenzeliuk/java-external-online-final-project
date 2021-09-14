@@ -6,6 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface Command {
 
-    WebPage execute(HttpServletRequest request, HttpServletResponse response);
+    Page execute(HttpServletRequest request, HttpServletResponse response);
 
 }

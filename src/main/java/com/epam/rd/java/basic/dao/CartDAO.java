@@ -5,5 +5,5 @@ import com.epam.rd.java.basic.model.Cart;
 
 public interface CartDAO extends AbstractDAO<Cart> {
 
-    Cart getCartByUserIdAndStatusId(int id, String nameStatus) throws DaoException;
+    Cart getCartByUserIdAndStatusName(int id, String nameStatus) throws DaoException;
 }

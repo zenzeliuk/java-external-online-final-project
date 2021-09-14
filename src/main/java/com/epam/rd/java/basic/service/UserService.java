@@ -6,4 +6,5 @@ import com.epam.rd.java.basic.model.User;
 public interface UserService extends AbstractService<User> {
 
     User findByLogin(String login) throws ServiceException;
+    User findByLoginAndPassword(String login, String password) throws ServiceException;
 }

@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class Cart extends BaseEntity implements Serializable {
 
-    private int statusId;
-    private int userId;
+    private Integer statusId;
+    private Integer userId;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -27,12 +27,12 @@ public class Cart extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder statusId(int statusId) {
+        public Builder statusId(Integer statusId) {
             Cart.this.statusId = statusId;
             return this;
         }
 
-        public Builder userId(int userId) {
+        public Builder userId(Integer userId) {
             Cart.this.userId = userId;
             return this;
         }
@@ -52,19 +52,19 @@ public class Cart extends BaseEntity implements Serializable {
         }
     }
 
-    public int getStatusId() {
+    public Integer getStatusId() {
         return statusId;
     }
 
-    public void setStatusId(int statusId) {
+    public void setStatusId(Integer statusId) {
         this.statusId = statusId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

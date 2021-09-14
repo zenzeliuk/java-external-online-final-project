@@ -112,4 +112,16 @@ public class CartItemServiceImpl implements CartItemService {
             dbConnection.close();
         }
     }
+
+    @Override
+    public List<CartItem> findAllByCartId(int id) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            cartItemDAO = daoFactory.getCartItemDAO(dbConnection.getConnection());
+            return cartItemDAO.findAllByCartId(id);
+        } catch (DaoException e) {
+            String exception = String.format("Cannot find list cart_item by cart id='%s'. %s", id, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
 }

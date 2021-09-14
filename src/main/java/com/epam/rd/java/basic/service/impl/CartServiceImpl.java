@@ -9,7 +9,6 @@ import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Cart;
-import com.epam.rd.java.basic.model.Status;
 import com.epam.rd.java.basic.service.CartService;
 import lombok.extern.log4j.Log4j2;
 
@@ -117,11 +116,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartByUserIdAndStatusId(int idUser, String nameStatus) throws ServiceException {
+    public Cart getCartByUserIdAndStatusName(int idUser, String nameStatus) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
             cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
             statusDAO = daoFactory.getStatusDAO(dbConnection.getConnection());
-            return cartDAO.getCartByUserIdAndStatusId(idUser, nameStatus);
+            return cartDAO.getCartByUserIdAndStatusName(idUser, nameStatus);
         } catch (DaoException e) {
             String exception = String.format("Cannot get cart by user_id='%s' and status='%s'. %s", idUser, nameStatus, e.getMessage());
             log.error(exception);

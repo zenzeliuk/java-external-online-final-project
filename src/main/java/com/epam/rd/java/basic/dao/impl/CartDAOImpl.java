@@ -62,7 +62,7 @@ public class CartDAOImpl implements CartDAO {
         try {
             preparedStatement = connection.prepareStatement
                     (QueryConstants.CART.CREATE, Statement.RETURN_GENERATED_KEYS);
-            setPreparedStatementWithoutId(cart, preparedStatement);
+            preparedStatement.setInt(1, cart.getStatusId());
             preparedStatement.executeUpdate();
             resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -139,11 +139,11 @@ public class CartDAOImpl implements CartDAO {
     }
 
     @Override
-    public Cart getCartByUserIdAndStatusId(int idUser, String nameStatus) throws DaoException {
+    public Cart getCartByUserIdAndStatusName(int idUser, String nameStatus) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
-            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_EMPTY_CART_BY_USER_ID);
+            preparedStatement = connection.prepareStatement(QueryConstants.CART.GET_CART_BY_USER_ID_AND_STATUS_NAME);
             preparedStatement.setInt(1, idUser);
             preparedStatement.setString(2, nameStatus);
             resultSet = preparedStatement.executeQuery();

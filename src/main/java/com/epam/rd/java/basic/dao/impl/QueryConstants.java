@@ -7,7 +7,7 @@ public class QueryConstants {
 
     public static class CART {
         public static final String FIND_ALL = "SELECT * FROM shop.cart";
-        public static final String CREATE = "INSERT INTO shop.cart (user_id, status_id) VALUES (?, ?)";
+        public static final String CREATE = "INSERT INTO shop.cart (status_id) VALUES (?)";
         public static final String GET_BY_ID = FIND_ALL + " WHERE shop.cart.id = ?";
         public static final String UPDATE = "" +
                 "UPDATE shop.cart " +
@@ -15,7 +15,7 @@ public class QueryConstants {
                 "    shop.cart.status_id   = ? " +
                 "WHERE shop.cart.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.cart WHERE shop.cart.id = ?";
-        public static final String GET_EMPTY_CART_BY_USER_ID = "" +
+        public static final String GET_CART_BY_USER_ID_AND_STATUS_NAME = "" +
                 "SELECT c.id          AS id, " +
                 "       c.user_id     AS user_id, " +
                 "       c.status_id   AS status_id, " +
@@ -41,6 +41,7 @@ public class QueryConstants {
                 "    shop.cart_item.count   = ? " +
                 "WHERE shop.cart_item.id = ? ";
         public static final String DELETE_BY_ID = "DELETE FROM shop.cart_item WHERE shop.cart_item.id = ?";
+        public static final String FIND_ALL_BY_CART_ID = FIND_ALL + " WHERE shop.cart_item.card_id = ?";
     }
 
     public static class CATEGORY {
@@ -79,6 +80,7 @@ public class QueryConstants {
         public static final String UPDATE = "UPDATE shop.role SET shop.role.name = ? WHERE shop.role.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.role WHERE shop.role.id = ?";
         public static final String FIND_BY_NAME = FIND_ALL + " WHERE shop.role.name = ?";
+        public static final String FIND_BY_ID = FIND_ALL + " WHERE shop.role.id = ?";
     }
 
     public static class STATUS {
@@ -102,6 +104,9 @@ public class QueryConstants {
                 "WHERE id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.user WHERE shop.user.id = ?";
         public static final String FIND_BY_LOGIN = FIND_ALL + " WHERE shop.user.login = ?";
+        public static final String FIND_BY_LOGIN_AND_PASSWORD = FIND_ALL + "" +
+                " WHERE shop.user.login = ?" +
+                " AND shop.user.password = ?";
     }
 
 

@@ -153,4 +153,24 @@ public class RoleDAOImpl implements RoleDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public Role findById(int roleId) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.ROLE.FIND_BY_ID);
+            preparedStatement.setInt(1, roleId);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return getFromResultSet(resultSet);
+        } catch (SQLException e) {
+            String exception = String.format("Cannot find role by id='%s'. %s", roleId, e.getMessage());
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

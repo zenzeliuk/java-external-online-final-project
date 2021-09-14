@@ -41,8 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         try {
             dbConnection.autoCommit(false);
             userDetailsDAO = daoFactory.getUserDetailsDAO(dbConnection.getConnection());
-            int id = userDetailsDAO.create(userDetails);
-            userDetails.setId(id);
+            userDetailsDAO.create(userDetails);
             dbConnection.commit();
             return userDetails;
         } catch (DaoException e) {

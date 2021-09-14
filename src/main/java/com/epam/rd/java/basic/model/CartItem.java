@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class CartItem extends BaseEntity implements Serializable {
 
-    private int cartId;
-    private int itemId;
+    private Integer cartId;
+    private Integer itemId;
     private BigDecimal price;
     private int countItem;
     private Timestamp createTime;
@@ -30,12 +30,12 @@ public class CartItem extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder cartId(int cartId) {
+        public Builder cartId(Integer cartId) {
             CartItem.this.cartId = cartId;
             return this;
         }
 
-        public Builder itemId(int itemId) {
+        public Builder itemId(Integer itemId) {
             CartItem.this.itemId = itemId;
             return this;
         }
@@ -45,7 +45,7 @@ public class CartItem extends BaseEntity implements Serializable {
             return this;
         }
 
-        public Builder countItem(int countItem) {
+        public Builder countItem(Integer countItem) {
             CartItem.this.countItem = countItem;
             return this;
         }
@@ -65,19 +65,19 @@ public class CartItem extends BaseEntity implements Serializable {
         }
     }
 
-    public int getCartId() {
+    public Integer getCartId() {
         return cartId;
     }
 
-    public void setCartId(int cartId) {
+    public void setCartId(Integer cartId) {
         this.cartId = cartId;
     }
 
-    public int getItemId() {
+    public Integer getItemId() {
         return itemId;
     }
 
-    public void setItemId(int itemId) {
+    public void setItemId(Integer itemId) {
         this.itemId = itemId;
     }
 
@@ -89,11 +89,11 @@ public class CartItem extends BaseEntity implements Serializable {
         this.price = price;
     }
 
-    public int getCountItem() {
+    public Integer getCountItem() {
         return countItem;
     }
 
-    public void setCountItem(int countItem) {
+    public void setCountItem(Integer countItem) {
         this.countItem = countItem;
     }
 

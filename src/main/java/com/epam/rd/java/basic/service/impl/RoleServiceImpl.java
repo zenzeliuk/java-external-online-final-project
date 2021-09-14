@@ -124,4 +124,16 @@ public class RoleServiceImpl implements RoleService {
             throw new ServiceException(exception);
         }
     }
+
+    @Override
+    public Role findById(int roleId) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            roleDAO = daoFactory.getRoleDAO(dbConnection.getConnection());
+            return roleDAO.findById(roleId);
+        } catch (DaoException e) {
+            String exception = String.format("Cannot find role by id='%s'. %s", roleId, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
 }
