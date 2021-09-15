@@ -19,7 +19,7 @@ public class AdminHomeCommandGET implements Command {
         User user = (User) session.getAttribute("user");
         Role role = (Role) session.getAttribute("role");
 
-        if (role == null || user == null || Role.ADMIN.getName().equals(role.getName())) {
+        if (role == null || user == null || !Role.ADMIN.getName().equals(role.getName())) {
             return new Page(Page.WebPath.LOGIN.getPath()).setDispatchType(Page.DispatchType.REDIRECT);
         }
 
