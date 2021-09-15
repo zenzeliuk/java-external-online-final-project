@@ -2,6 +2,7 @@ package com.epam.rd.java.basic.controller;
 
 import com.epam.rd.java.basic.controller.annotations.Action;
 import com.epam.rd.java.basic.controller.command.admin.AdminHomeCommandGET;
+import com.epam.rd.java.basic.controller.command.admin.AdminUsersCommandGET;
 import com.epam.rd.java.basic.controller.command.auth.*;
 import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
@@ -89,9 +90,16 @@ public enum ActionCommandEnum {
     },
 
     @Action(url = "/user/home", method = "GET")
-   USER_HOME {
+    USER_HOME {
         {
             this.command = new UserHomeCommandGET();
+        }
+    },
+
+    @Action(url = "/admin/users", method = "GET")
+    ADMIN_USERS {
+        {
+            this.command = new AdminUsersCommandGET();
         }
     },
 

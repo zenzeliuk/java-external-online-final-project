@@ -1,16 +1,23 @@
 package com.epam.rd.java.basic.service.impl;
 
+import com.epam.rd.java.basic.dao.RoleDAO;
 import com.epam.rd.java.basic.dao.UserDAO;
+import com.epam.rd.java.basic.dao.UserDetailsDAO;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
+import com.epam.rd.java.basic.model.Role;
 import com.epam.rd.java.basic.model.User;
+import com.epam.rd.java.basic.model.UserDetails;
+import com.epam.rd.java.basic.model.dto.UserDTO;
+import com.epam.rd.java.basic.model.mapper.UserMapper;
 import com.epam.rd.java.basic.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -18,6 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final DAOFactory daoFactory;
     private UserDAO userDAO;
+    private RoleDAO roleDAO;
+    private UserDetailsDAO userDetailsDAO;
 
     public UserServiceImpl() {
         daoFactory = new DAOFactoryImpl();
@@ -132,6 +141,23 @@ public class UserServiceImpl implements UserService {
             return userDAO.findByLoginAndPassword(login, password);
         } catch (DaoException e) {
             String exception = String.format("Cannot find user by login='%s'. %s", login, e.getMessage());
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
+
+    @Override
+    public List<UserDTO> findAllDTO() throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            roleDAO = daoFactory.getRoleDAO(dbConnection.getConnection());
+            userDetailsDAO = daoFactory.getUserDetailsDAO(dbConnection.getConnection());
+            List<User> userList = userDAO.findAll();
+            List<UserDetails> userDetailsList = userDetailsDAO.findAll();
+            List<Role> roleList = roleDAO.findAll();
+            return UserMapper.toUserDTOList(userList, userDetailsList, roleList);
+        } catch (DaoException e) {
+            String exception = "Cannot find all user dto. " + e.getMessage();
             log.error(exception);
             throw new ServiceException(exception);
         }

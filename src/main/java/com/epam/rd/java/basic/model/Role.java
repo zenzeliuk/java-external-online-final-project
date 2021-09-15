@@ -6,7 +6,7 @@ public enum Role implements Serializable, Entity {
 
     ADMIN("admin"),
     USER("user"),
-    UNREGISTERED("unregistered");
+    BLOCKED("blocked");
 
     private int id;
     private final String name;
@@ -36,17 +36,19 @@ public enum Role implements Serializable, Entity {
     }
 
     public static Role createRole(String name, int id) {
-        Role role = UNREGISTERED;
-        if (name == null) {
-            return role;
-        }
+        Role role = null;
         if (name.equalsIgnoreCase(ADMIN.name)) {
             role = ADMIN;
+            role.id = id;
         }
         if (name.equalsIgnoreCase(USER.name)) {
             role = USER;
+            role.id = id;
         }
-        role.id = id;
+        if (name.equalsIgnoreCase(BLOCKED.name)) {
+            role = BLOCKED;
+            role.id = id;
+        }
         return role;
     }
 

@@ -29,7 +29,10 @@ public class SingInCommandPOST implements Command {
         try {
             User user = userService.findByLoginAndPassword(login, password);
             Role role = roleService.findById(user.getRoleId());
-
+            if (role.getName().equals(Role.BLOCKED.getName())) {
+                request.setAttribute("user_blocked", true);
+                return new Page(PathPageManager.getProperty("page.error")).setDispatchType(Page.DispatchType.FORWARD);
+            }
             request.getSession().setAttribute("user", user);
             request.getSession().setAttribute("role", role);
             return new Page(Page.WebPath.HOME.getPath()).setDispatchType(Page.DispatchType.REDIRECT);
