@@ -17,7 +17,6 @@ import com.epam.rd.java.basic.model.mapper.UserMapper;
 import com.epam.rd.java.basic.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -147,17 +146,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> findAllDTO() throws ServiceException {
+    public List<UserDTO> findAllWithPaginationDTO(Integer start, Integer total) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
             userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             roleDAO = daoFactory.getRoleDAO(dbConnection.getConnection());
             userDetailsDAO = daoFactory.getUserDetailsDAO(dbConnection.getConnection());
-            List<User> userList = userDAO.findAll();
+            List<User> userList = userDAO.findAllWithPagination(start, total);
             List<UserDetails> userDetailsList = userDetailsDAO.findAll();
             List<Role> roleList = roleDAO.findAll();
             return UserMapper.toUserDTOList(userList, userDetailsList, roleList);
         } catch (DaoException e) {
             String exception = "Cannot find all user dto. " + e.getMessage();
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
+
+    @Override
+    public Integer getCountRows() throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            return userDAO.getCountRows();
+        } catch (DaoException e) {
+            String exception = "Cannot get count rows. " + e.getMessage();
             log.error(exception);
             throw new ServiceException(exception);
         }

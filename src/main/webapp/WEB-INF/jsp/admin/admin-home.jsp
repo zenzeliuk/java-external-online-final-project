@@ -8,7 +8,7 @@
     <t:page>
         <jsp:body>
 
-            <a href="${pageContext.request.contextPath}/admin/users">
+            <a href="${pageContext.request.contextPath}/admin/users?page=1">
                 <fmt:message key="msg.admin-users"/>
             </a>
             <a href="${pageContext.request.contextPath}/admin/carts">

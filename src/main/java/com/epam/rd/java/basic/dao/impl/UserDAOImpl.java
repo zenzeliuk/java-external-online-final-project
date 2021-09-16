@@ -179,4 +179,48 @@ public class UserDAOImpl implements UserDAO {
             close.closePrepareStatement(preparedStatement);
         }
     }
+
+    @Override
+    public List<User> findAllWithPagination(Integer start, Integer total) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            List<User> resultList = new ArrayList<>();
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.FIND_ALL_WITH_PAGINATION);
+            preparedStatement.setInt(1, (start-1));
+            preparedStatement.setInt(2, total);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                User result = getFromResultSet(resultSet);
+                resultList.add(result);
+            }
+            return resultList;
+        } catch (SQLException e) {
+            String exception = "Cannot find all user with pagination. " + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
+
+    @Override
+    public Integer getCountRows() throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            preparedStatement = connection.prepareStatement(QueryConstants.USER.GET_COUNT_ROWS);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("COUNT(*)");
+        } catch (SQLException e) {
+            String exception = "Cannot get count rows. " + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
 }

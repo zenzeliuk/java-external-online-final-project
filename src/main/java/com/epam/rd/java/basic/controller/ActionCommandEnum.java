@@ -8,6 +8,7 @@ import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
 import com.epam.rd.java.basic.controller.command.cart.EditCountItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.AddItemToCartCommandPOST;
+import com.epam.rd.java.basic.controller.command.item.FilterItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.ItemsCommandGET;
 import com.epam.rd.java.basic.controller.command.user.UserHomeCommandGET;
 
@@ -100,6 +101,13 @@ public enum ActionCommandEnum {
     ADMIN_USERS {
         {
             this.command = new AdminUsersCommandGET();
+        }
+    },
+
+    @Action(url = "/app/filter-item", method = "GET")
+    CATEGORY_FILTER {
+        {
+            this.command = new FilterItemCommandGET();
         }
     },
 

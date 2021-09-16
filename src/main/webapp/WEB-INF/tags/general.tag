@@ -2,7 +2,7 @@
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="footer" fragment="true" %>
 <%@attribute name="css" fragment="true" %>
-
+<jsp:invoke fragment="css"/>
 <html>
 <head>
     <jsp:invoke fragment="css"/>

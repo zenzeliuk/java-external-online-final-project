@@ -4,7 +4,9 @@ import com.epam.rd.java.basic.controller.Command;
 import com.epam.rd.java.basic.controller.Page;
 import com.epam.rd.java.basic.controller.util.PathPageManager;
 import com.epam.rd.java.basic.exception.ServiceException;
+import com.epam.rd.java.basic.model.Category;
 import com.epam.rd.java.basic.model.Item;
+import com.epam.rd.java.basic.service.CategoryService;
 import com.epam.rd.java.basic.service.ItemService;
 import com.epam.rd.java.basic.service.factory.ServiceFactory;
 import com.epam.rd.java.basic.service.factory.impl.ServiceFactoryImpl;
@@ -20,9 +22,13 @@ public class ItemsCommandGET implements Command {
 
         ServiceFactory factory = new ServiceFactoryImpl();
         ItemService itemService = factory.getItemService();
+        CategoryService categoryService = factory.getCategoryService();
+
 
         try {
             List<Item> itemList = itemService.findAll();
+            List<Category> categoryList = categoryService.findAll();
+            request.getSession().setAttribute("category_list", categoryList);
             request.getSession().setAttribute("items", itemList);
             return new Page(PathPageManager.getProperty("page.items")).setDispatchType(Page.DispatchType.FORWARD);
         } catch (ServiceException e) {

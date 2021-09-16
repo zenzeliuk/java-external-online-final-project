@@ -112,6 +112,8 @@ public class QueryConstants {
         public static final String FIND_BY_LOGIN_AND_PASSWORD = FIND_ALL + "" +
                 " WHERE shop.user.login = ?" +
                 " AND shop.user.password = ?";
+        public static final String FIND_ALL_WITH_PAGINATION = FIND_ALL + " LIMIT ?,?";
+        public static final String GET_COUNT_ROWS = "SELECT COUNT(*) FROM shop.user";
     }
 
 

@@ -10,6 +10,6 @@ public interface UserService extends AbstractService<User> {
 
     User findByLogin(String login) throws ServiceException;
     User findByLoginAndPassword(String login, String password) throws ServiceException;
-
-    List<UserDTO> findAllDTO() throws ServiceException;
+    List<UserDTO> findAllWithPaginationDTO(Integer start, Integer total) throws ServiceException;
+    Integer getCountRows() throws ServiceException;
 }

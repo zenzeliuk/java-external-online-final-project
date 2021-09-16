@@ -11,7 +11,19 @@
     <c:set var="BLOCKED" value="<%=Role.BLOCKED.getName()%>"/>
     <t:page>
         <jsp:body>
-
+            <div class="container">
+                <div class="paginate" style="width:600px">
+                    <ul class="pagination">
+                        <c:forEach items="${sessionScope.pages}" var="page">
+                            <li>
+                                <a href="${pageContext.request.contextPath}?page=${page}">
+                                        ${page}
+                                </a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </div>
             <table>
                 <caption><fmt:message key="msg.admin-users"/></caption>
                 <tr>
@@ -69,6 +81,7 @@
                     </tr>
                 </c:forEach>
             </table>
+
         </jsp:body>
     </t:page>
 </fmt:bundle>
