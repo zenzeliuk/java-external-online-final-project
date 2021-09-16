@@ -15,68 +15,17 @@ CREATE SCHEMA IF NOT EXISTS `shop` DEFAULT CHARACTER SET utf8 ;
 USE `shop` ;
 
 -- -----------------------------------------------------
--- Table `shop`.`category`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shop`.`category` (
-                                                 `id` INT NOT NULL AUTO_INCREMENT,
-                                                 `name` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `shop`.`brand`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shop`.`brand` (
-                                              `id` INT NOT NULL AUTO_INCREMENT,
-                                              `name` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `shop`.`color`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `shop`.`color` (
-                                              `id` INT NOT NULL AUTO_INCREMENT,
-                                              `name` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`id`))
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `shop`.`item`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `shop`.`item` (
                                              `id` INT NOT NULL AUTO_INCREMENT,
-                                             `category_id` INT NULL,
-                                             `brand_id` INT NULL,
-                                             `color_id` INT NULL,
                                              `count` INT NULL,
                                              `name` VARCHAR(255) NOT NULL,
     `image` VARCHAR(1024) NULL,
     `price` DECIMAL NOT NULL,
     `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     `update_time` TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    INDEX `fk_item_category_idx` (`category_id` ASC) VISIBLE,
-    INDEX `fk_item_brand_idx` (`brand_id` ASC) VISIBLE,
-    INDEX `fk_item_color_idx` (`color_id` ASC) VISIBLE,
-    CONSTRAINT `fk_item_category`
-    FOREIGN KEY (`category_id`)
-    REFERENCES `shop`.`category` (`id`)
-                                 ON DELETE SET NULL
-                                 ON UPDATE CASCADE,
-    CONSTRAINT `fk_item_brand`
-    FOREIGN KEY (`brand_id`)
-    REFERENCES `shop`.`brand` (`id`)
-                                 ON DELETE SET NULL
-                                 ON UPDATE CASCADE,
-    CONSTRAINT `fk_item_color`
-    FOREIGN KEY (`color_id`)
-    REFERENCES `shop`.`color` (`id`)
-                                 ON DELETE SET NULL
-                                 ON UPDATE CASCADE)
+    PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
 
@@ -187,6 +136,74 @@ CREATE TABLE IF NOT EXISTS `shop`.`user_details` (
     FOREIGN KEY (`id`)
     REFERENCES `shop`.`user` (`id`)
     ON DELETE CASCADE
+    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `shop`.`category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shop`.`category` (
+                                                 `id` INT NOT NULL AUTO_INCREMENT,
+                                                 `name` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `shop`.`brand`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shop`.`brand` (
+                                              `id` INT NOT NULL AUTO_INCREMENT,
+                                              `name` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `shop`.`color`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shop`.`color` (
+                                              `id` INT NOT NULL AUTO_INCREMENT,
+                                              `name` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `shop`.`item_details`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `shop`.`item_details` (
+                                                     `item_id` INT NOT NULL,
+                                                     `category_id` INT NULL,
+                                                     `brand_id` INT NULL,
+                                                     `color_id` INT NULL,
+                                                     PRIMARY KEY (`item_id`),
+    INDEX `fk_item_details_category_idx` (`category_id` ASC) VISIBLE,
+    INDEX `fk_item_details_brand_idx` (`brand_id` ASC) VISIBLE,
+    INDEX `fk_item_details_color_idx` (`color_id` ASC) VISIBLE,
+    CONSTRAINT `fk_item_details_item`
+    FOREIGN KEY (`item_id`)
+    REFERENCES `shop`.`item` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_item_details_category`
+    FOREIGN KEY (`category_id`)
+    REFERENCES `shop`.`category` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_item_details_brand`
+    FOREIGN KEY (`brand_id`)
+    REFERENCES `shop`.`brand` (`id`)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE,
+    CONSTRAINT `fk_item_details_color`
+    FOREIGN KEY (`color_id`)
+    REFERENCES `shop`.`color` (`id`)
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
     ENGINE = InnoDB;
 

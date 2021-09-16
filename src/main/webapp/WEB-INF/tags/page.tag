@@ -1,6 +1,11 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:general>
+    <jsp:attribute name="css">
+        <link href="/css/all.css" rel="stylesheet" type="text/css">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+              id="bootstrap-css">
+    </jsp:attribute>
     <jsp:attribute name="header">
         <jsp:include page="/WEB-INF/jsp/header.jsp"/>
     </jsp:attribute>

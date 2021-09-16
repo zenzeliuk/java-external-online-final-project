@@ -48,9 +48,6 @@ public class ItemDAOImpl implements ItemDAO {
     private Item getFromResultSet(ResultSet resultSet) throws SQLException {
         return Item.builder()
                 .id(resultSet.getInt("id"))
-                .categoryId(resultSet.getInt("category_id"))
-                .brandId(resultSet.getInt("brand_id"))
-                .colorId(resultSet.getInt("color_id"))
                 .count(resultSet.getInt("count"))
                 .name(resultSet.getString("name"))
                 .image(resultSet.getString("image"))
@@ -87,13 +84,10 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     private void setPreparedStatementWithoutId(Item item, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setInt(1, item.getCategoryId());
-        preparedStatement.setInt(2, item.getBrandId());
-        preparedStatement.setInt(3, item.getColorId());
-        preparedStatement.setInt(4, item.getCount());
-        preparedStatement.setString(5, item.getName());
-        preparedStatement.setString(6, item.getImage());
-        preparedStatement.setBigDecimal(7, item.getPrice());
+        preparedStatement.setInt(1, item.getCount());
+        preparedStatement.setString(2, item.getName());
+        preparedStatement.setString(3, item.getImage());
+        preparedStatement.setBigDecimal(4, item.getPrice());
     }
 
     @Override
@@ -122,7 +116,7 @@ public class ItemDAOImpl implements ItemDAO {
         try {
             preparedStatement = connection.prepareStatement(QueryConstants.ITEM.UPDATE);
             setPreparedStatementWithoutId(item, preparedStatement);
-            preparedStatement.setInt(8, item.getId());
+            preparedStatement.setInt(5, item.getId());
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             String exception = "Cannot update item. " + item.toString() + e.getMessage();

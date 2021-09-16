@@ -6,9 +6,6 @@ import java.util.Objects;
 
 public class Item extends BaseEntity {
 
-    private int categoryId;
-    private int brandId;
-    private int colorId;
     private int count;
     private String name;
     private String image;
@@ -29,21 +26,6 @@ public class Item extends BaseEntity {
 
         public Builder id(int id) {
             Item.this.id = id;
-            return this;
-        }
-
-        public Builder categoryId(int categoryId) {
-            Item.this.categoryId = categoryId;
-            return this;
-        }
-
-        public Builder brandId(int brandId) {
-            Item.this.brandId = brandId;
-            return this;
-        }
-
-        public Builder colorId(int colorId) {
-            Item.this.colorId = colorId;
             return this;
         }
 
@@ -81,30 +63,6 @@ public class Item extends BaseEntity {
             return Item.this;
         }
 
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(int brandId) {
-        this.brandId = brandId;
-    }
-
-    public int getColorId() {
-        return colorId;
-    }
-
-    public void setColorId(int colorId) {
-        this.colorId = colorId;
     }
 
     public String getName() {
@@ -161,10 +119,7 @@ public class Item extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Item item = (Item) o;
-        return categoryId == item.categoryId
-                && brandId == item.brandId
-                && colorId == item.colorId
-                && count == item.count
+        return  count == item.count
                 && Objects.equals(name, item.name)
                 && Objects.equals(image, item.image)
                 && Objects.equals(price, item.price)
@@ -174,16 +129,13 @@ public class Item extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), categoryId, brandId, colorId, name, count, image, price, createTime, updateTime);
+        return Objects.hash(super.hashCode(), name, count, image, price, createTime, updateTime);
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", categoryId=" + categoryId +
-                ", brandId=" + brandId +
-                ", colorId=" + colorId +
                 ", name='" + name + '\'' +
                 ", count=" + count +
                 ", image='" + image + '\'' +

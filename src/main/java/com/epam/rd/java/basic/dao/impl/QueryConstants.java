@@ -65,15 +65,12 @@ public class QueryConstants {
     public static class ITEM {
         public static final String FIND_ALL = "SELECT * FROM shop.item";
         public static final String CREATE = "" +
-                "INSERT INTO shop.item (category_id, brand_id, color_id, count, name, image, price) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "INSERT INTO shop.item (count, name, image, price) " +
+                "VALUES (?, ?, ?, ?)";
         public static final String GET_BY_ID = FIND_ALL + " WHERE shop.item.id = ?";
         public static final String UPDATE = "" +
                 "UPDATE shop.item " +
-                "SET shop.item.category_id = ?, " +
-                "    shop.item.brand_id    = ?, " +
-                "    shop.item.color_id    = ?, " +
-                "    shop.item.count       = ?, " +
+                "SET shop.item.count       = ?, " +
                 "    shop.item.name        = ?, " +
                 "    shop.item.image       = ?, " +
                 "    shop.item.price       = ? " +
