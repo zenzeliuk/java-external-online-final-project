@@ -7,21 +7,31 @@
 
     <t:page>
         <jsp:body>
-            https://freefrontend.com/bootstrap-code-examples/
-            https://freefrontend.com/bootstrap-product-cards/
-            https://bbbootstrap.com/snippets/bootstrap-ecommerce-product-grid-view-card-19577966
-            https://bootsnipp.com/snippets/N6kk4
-            https://bootsnipp.com/snippets/N6pQ6
-            https://bootsnipp.com/snippets/lWmk2
+
             <div>
-                <b><fmt:message key="msg.category"/></b><br/>
-                <c:forEach items="${sessionScope.category_list}" var="category">
-                    <form action="filter-item" method="GET">
-                        <input type="text" name="category_id" value="${category.id}" hidden>
-                        <button type="submit">${category.name}</button>
-                    </form>
-                </c:forEach>
+                <form action="filter-item" method="GET">
+                    <label for="category"><fmt:message key="msg.category"/></label>
+                    <select class="form-control" id="category" required="true" name="category_id">
+                        <option value="0"><fmt:message key="msg.all-category"/></option>
+                        <c:forEach items="${sessionScope.category_list}" var="category">
+                            <option value="${category.id}">
+                                    ${category.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <label for="color"><fmt:message key="msg.color"/></label>
+                    <select class="form-control" id="color" required="true" name="color_id">
+                        <option value="0"><fmt:message key="msg.all-color"/></option>
+                        <c:forEach items="${sessionScope.color_list}" var="color">
+                            <option value="${color.id}">
+                                    ${color.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                    <input type="submit" value="Submit"/>
+                </form>
             </div>
+
 
             <div class="container d-flex justify-content-center mt-50 mb-50">
                 <div class="row">
@@ -30,7 +40,8 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="card-img-actions">
-                                        <img src="${item.image}"class="card-img img-fluid" width="96" height="350" alt="">
+                                        <img src="${item.image}" class="card-img img-fluid" width="96" height="350"
+                                             alt="">
                                     </div>
                                 </div>
                                 <div class="card-body bg-light text-center">
@@ -38,8 +49,7 @@
                                         <h6 class="font-weight-semibold mb-2">
                                             <a class="text-default mb-2" data-abc="true">${item.name}</a>
                                         </h6>
-                                        <a class="text-muted" data-abc="true">Laptops &
-                                            Notebooks</a>
+                                        <a class="text-muted" data-abc="true">Description</a>
                                     </div>
                                     <h3 class="mb-0 font-weight-semibold">${item.price} UAH</h3>
 
@@ -61,29 +71,6 @@
             </div>
 
 
-<%--            <table>--%>
-<%--                <tr>--%>
-<%--                    <th id="name"><fmt:message key="msg.item-name"/></th>--%>
-<%--                    <th id="price"><fmt:message key="msg.item-price"/></th>--%>
-<%--                    <th id="image"><fmt:message key="msg.item-image"/></th>--%>
-<%--                    <th id="addtocart"><fmt:message key="msg.add-to-cart"/></th>--%>
-<%--                </tr>--%>
-<%--                <c:forEach items="${sessionScope.items}" var="item">--%>
-<%--                    <form action="add-to-cart" method="POST">--%>
-<%--                        <tr>--%>
-<%--                            <input type="text" name="item_id" value="${item.id}" hidden>--%>
-<%--                            <td headers="name"><c:out value="${item.name}"/></td>--%>
-<%--                            <td headers="price"><c:out value="${item.price}"/></td>--%>
-<%--                            <td headers="image"><c:out value="${item.image}"/></td>--%>
-<%--                            <td headers="addtocart">--%>
-<%--                                <c:if test='${!fn:contains(sessionScope.cartitem, item.id)}'>--%>
-<%--                                    <button type="submit"><fmt:message key="msg.add"/></button>--%>
-<%--                                </c:if>--%>
-<%--                            </td>--%>
-<%--                        </tr>--%>
-<%--                    </form>--%>
-<%--                </c:forEach>--%>
-<%--            </table>--%>
         </jsp:body>
 
     </t:page>

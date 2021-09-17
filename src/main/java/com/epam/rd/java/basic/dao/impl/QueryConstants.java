@@ -134,4 +134,8 @@ public class QueryConstants {
                 "WHERE ud.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.user_details WHERE shop.user_details.id = ?";
     }
+
+    public static class COLOR {
+        public static final String FIND_ALL = "SELECT * FROM shop.color";
+    }
 }
