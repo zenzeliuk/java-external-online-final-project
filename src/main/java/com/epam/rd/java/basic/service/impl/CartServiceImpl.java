@@ -13,6 +13,7 @@ import com.epam.rd.java.basic.model.dto.CartDTO;
 import com.epam.rd.java.basic.service.CartService;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -74,6 +75,9 @@ public class CartServiceImpl implements CartService {
     public boolean update(Cart cart) throws ServiceException {
         DBConnection dbConnection = new ConnectionImpl();
         try {
+            if (cart.getUserId() == 0){
+                cart.setUserId(null);
+            }
             dbConnection.autoCommit(false);
             cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
             if (cartDAO.update(cart)) {
@@ -139,5 +143,41 @@ public class CartServiceImpl implements CartService {
             log.error(exception);
             throw new ServiceException(exception);
         }
+    }
+
+    @Override
+    public List<Integer> getPages(String user, String dateFrom, String dateTo, String status) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            List<Integer> pages = new ArrayList<>();
+            cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
+            Integer countRows = cartDAO.getCountRows(user, dateFrom, dateTo, status);
+            if (countRows != null) {
+                int p = (countRows / 10) + 1;
+                for (int i = 1; i <= p; i++) {
+                    pages.add(i);
+                }
+            }
+            return pages;
+        } catch (DaoException e) {
+            String exception = "Cannot get pages. " + e.getMessage();
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
+
+    @Override
+    public List<CartDTO> findWithPaginationFilterAndSorting(String user, String dateFrom, String dateTo, String status, String page, String sorting) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            cartDAO = daoFactory.getCartDAO(dbConnection.getConnection());
+            return cartDAO.findWithPaginationFilterAndSorting(
+                    user, dateFrom, dateTo, status, page, sorting
+            );
+        } catch (DaoException e) {
+            String exception = "Cannot find cart with filter. " + e.getMessage();
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+
+
     }
 }

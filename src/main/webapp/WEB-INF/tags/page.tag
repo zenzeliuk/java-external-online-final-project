@@ -2,10 +2,11 @@
 
 <t:general>
     <jsp:attribute name="css">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/all.css" rel="stylesheet" type="text/css">
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/all.css" >
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
               id="bootstrap-css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/table.css"/>
     </jsp:attribute>
     <jsp:attribute name="header">
         <jsp:include page="/WEB-INF/jsp/header.jsp"/>

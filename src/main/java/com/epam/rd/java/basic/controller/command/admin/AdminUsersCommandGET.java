@@ -19,13 +19,19 @@ public class AdminUsersCommandGET implements Command {
     @Override
     public Page execute(HttpServletRequest request, HttpServletResponse response) {
 
-        Integer page = Integer.valueOf(request.getParameter("page"));
+        String pg = request.getParameter("page");
+
+        if (pg == null){
+            pg = "1";
+        }
+        Integer page = Integer.valueOf(pg);
 
         ServiceFactory factory = new ServiceFactoryImpl();
         UserService userService = factory.getUserService();
 
         List<UserDTO> userListDTO = null;
         List<Integer> pages = new ArrayList<>();
+
 
         try {
             Integer countRows = userService.getCountRows();

@@ -8,40 +8,50 @@
     <t:page>
         <jsp:body>
 
-            <div class="container">
-                <div class="paginate" style="width:600px">
-                    <ul class="pagination">
-                        <c:forEach items="${sessionScope.pages_item}" var="page">
-                            <li>
-                                <a href="${pageContext.request.contextPath}?page=${page}">
-                                        ${page}
-                                </a>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </div>
+            <form action="/app/item" method="GET">
+                Pagination:
+                <c:forEach items="${sessionScope.pages_item}" var="page">
+                    <a href="${pageContext.request.contextPath}?category_id=${requestScope.category_id}&brand_id=${requestScope.brand_id}&color_id=${requestScope.color_id}&price_from=${requestScope.price_from}&price_to=${requestScope.price_to}&sorting=${requestScope.sorting}&page=${page}">${page}</a>
+                </c:forEach><br/>
 
+                FILTER:<br/>
+                <label for="category"><fmt:message key="msg.category"/></label>
+                <select name="category_id" id="category">
+                    <option value="0"><fmt:message key="msg.all"/></option>
+                    <c:forEach items="${sessionScope.category_list}" var="category">
+                        <option value="${category.id}">${category.name}</option>
+                    </c:forEach>
+                </select>
 
-            <form action="item" method="GET">
-                <fmt:message key="msg.category"/>
-                <c:forEach items="${sessionScope.category_list}" var="category">
-                    <input type="checkbox" name="category_id" value="${category.id}">${category.name}
-                </c:forEach>
-                <br/>
-                <fmt:message key="msg.brand"/>
-                <c:forEach items="${sessionScope.brand_list}" var="brand">
-                    <input type="checkbox" name="brand_id" value="${brand.id}">${brand.name}
-                </c:forEach>
-                <br/>
-                <fmt:message key="msg.color"/>
-                <c:forEach items="${sessionScope.color_list}" var="color">
-                    <input type="checkbox" name="color_id" value="${color.id}">${color.name}
-                </c:forEach>
-                <input type="text" name="page" value="1" hidden>
-                <br/>
-                <button type="submit">Submit</button>
+                <label for="brand"><fmt:message key="msg.brand"/></label>
+                <select name="brand_id" id="brand">
+                    <option value="0"><fmt:message key="msg.all"/></option>
+                    <c:forEach items="${sessionScope.brand_list}" var="brand">
+                        <option value="${brand.id}">${brand.name}</option>
+                    </c:forEach>
+                </select>
+
+                <label for="color"><fmt:message key="msg.color"/></label>
+
+                <select name="color_id" id="color">
+                    <option value="0"><fmt:message key="msg.all"/></option>
+                    <c:forEach items="${sessionScope.color_list}" var="color">
+                        <option value="${color.id}">${color.name}</option>
+                    </c:forEach>
+                </select>
+
+                <label for="sorting"><fmt:message key="msg.sorting"/></label>
+                <select name="sorting" id="sorting">
+                    <option value="0"><fmt:message key="msg.sorting-news-increase"/></option>
+                    <option value="1"><fmt:message key="msg.sorting-news-decrease"/></option>
+                    <option value="2"><fmt:message key="msg.sorting-name-increase"/></option>
+                    <option value="3"><fmt:message key="msg.sorting-name-decrease"/></option>
+                    <option value="4"><fmt:message key="msg.sorting-price-increase"/></option>
+                    <option value="5"><fmt:message key="msg.sorting-price-decrease"/></option>
+                </select>
+                <button type="submit"><fmt:message key="msg.submit"/></button>
             </form>
+
 
             <div class="container d-flex justify-content-center mt-50 mb-50">
                 <div class="row">

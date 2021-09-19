@@ -6,9 +6,9 @@ import com.epam.rd.java.basic.model.Item;
 import java.util.List;
 
 public interface ItemService extends AbstractService<Item> {
-    List<Integer> getPages(Integer categoryId, Integer colorId, Integer brandId) throws ServiceException;
+    List<Integer> getPages(String categoryId, String colorId, String brandId, String priceFrom, String priceTo) throws ServiceException;
 
     List<Item> findWithPaginationFilterAndSorting
-            (Integer page, Integer categoryId, Integer colorId, Integer brandId, String sortingId)
+            (String categoryId, String colorId, String brandId, String priceFrom, String priceTo, String page, String sorting)
             throws ServiceException;
 }

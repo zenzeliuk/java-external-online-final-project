@@ -1,16 +1,12 @@
 package com.epam.rd.java.basic.controller;
 
 import com.epam.rd.java.basic.controller.annotations.Action;
-import com.epam.rd.java.basic.controller.command.admin.AdminCartsCommandGET;
-import com.epam.rd.java.basic.controller.command.admin.AdminHomeCommandGET;
-import com.epam.rd.java.basic.controller.command.admin.AdminUsersCommandGET;
-import com.epam.rd.java.basic.controller.command.admin.ChangeRoleCommandGET;
+import com.epam.rd.java.basic.controller.command.admin.*;
 import com.epam.rd.java.basic.controller.command.auth.*;
 import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
 import com.epam.rd.java.basic.controller.command.cart.EditCountItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.AddItemToCartCommandPOST;
-import com.epam.rd.java.basic.controller.command.item.FilterItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.ItemsCommandGET;
 import com.epam.rd.java.basic.controller.command.user.UserHomeCommandGET;
 
@@ -106,14 +102,6 @@ public enum ActionCommandEnum {
         }
     },
 
-    //todo
-    @Action(url = "/app/filter-item", method = "GET")
-    CATEGORY_FILTER {
-        {
-            this.command = new FilterItemCommandGET();
-        }
-    },
-
     @Action(url = "/admin/change-role", method = "GET")
     CHANGE_ROLE {
         {
@@ -125,6 +113,12 @@ public enum ActionCommandEnum {
     CARTS {
         {
             this.command = new AdminCartsCommandGET();
+        }
+    },
+    @Action(url = "/admin/change_status", method = "POST")
+    CHANGE_STATUS {
+        {
+            this.command = new ChangeStatusCartPOST();
         }
     },
     ;

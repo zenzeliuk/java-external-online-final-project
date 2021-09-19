@@ -37,7 +37,8 @@ public class Page {
         ITEMS("/app/item?page=1"),
         LOGIN("/login/sign-in"),
         CART("/app/cart"),
-        USERS("/admin/users?page=1");
+        USERS("/admin/users?page=1"),
+        CARTS("/admin/carts");
 
         private final String path;
 

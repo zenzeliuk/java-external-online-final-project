@@ -120,11 +120,11 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public List<Integer> getPages(Integer categoryId, Integer colorId, Integer brandId) throws ServiceException {
+    public List<Integer> getPages(String categoryId, String colorId, String brandId, String priceFrom, String priceTo) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
             List<Integer> pages = new ArrayList<>();
             itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
-            Integer countRows = itemDAO.getCountRows(categoryId, colorId, brandId);
+            Integer countRows = itemDAO.getCountRows(categoryId, colorId, brandId, priceFrom, priceTo);
             if (countRows != null) {
                 int p = (countRows / 10) + 1;
                 for (int i = 1; i <= p; i++) {
@@ -141,13 +141,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> findWithPaginationFilterAndSorting
-            (Integer page, Integer categoryId, Integer colorId, Integer brandId, String sortingId)
+            (String categoryId, String colorId, String brandId, String priceFrom, String priceTo, String page, String sorting)
             throws ServiceException {
 
         try (DBConnection dbConnection = new ConnectionImpl()) {
             itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
             return itemDAO.findWithPaginationFilterAndSorting(
-                    page, categoryId, colorId, brandId, sortingId
+                    categoryId, colorId, brandId, priceFrom, priceTo, page, sorting
             );
         } catch (DaoException e) {
             String exception = "Cannot find item with filter. " + e.getMessage();

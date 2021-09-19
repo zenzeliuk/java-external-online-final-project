@@ -28,28 +28,34 @@ public class ItemsCommandGET implements Command {
     @Override
     public Page execute(HttpServletRequest request, HttpServletResponse response) {
 
-        String sortingId = request.getParameter("sorting_id");
-        String p = request.getParameter("page");
-        String caId = request.getParameter("category_id");
-        String coId = request.getParameter("color_id");
-        String bId = request.getParameter("brand_id");
+        String page = request.getParameter("page");
+        String categoryId = request.getParameter("category_id");
+        String colorId = request.getParameter("color_id");
+        String brandId = request.getParameter("brand_id");
+        String priceFrom = request.getParameter("price_from");
+        String priceTo = request.getParameter("price_to");
+        String sorting = request.getParameter("sorting");
 
-        Integer page = 1;
-        Integer categoryId = null;
-        Integer colorId = null;
-        Integer brandId = null;
-
-        if (nonNull(p)) {
-            page = Integer.valueOf(p);
+        if (page == null || page.equals("")) {
+            page = "1";
         }
-        if (nonNull(caId)) {
-            categoryId = Integer.valueOf(caId);
+        if (categoryId == null || categoryId.equals("")) {
+            categoryId = "0";
         }
-        if (nonNull(coId)) {
-            colorId = Integer.valueOf(coId);
+        if (colorId == null || colorId.equals("")) {
+            colorId = "0";
         }
-        if (nonNull(bId)) {
-            brandId = Integer.valueOf(bId);
+        if (brandId == null || brandId.equals("")) {
+            brandId = "0";
+        }
+        if (priceFrom == null || priceFrom.equals("")) {
+            priceFrom = "0";
+        }
+        if (priceTo == null || priceTo.equals("")) {
+            priceTo = "9999999";
+        }
+        if (sorting == null || sorting.equals("")) {
+            sorting = "0";
         }
 
         ServiceFactory factory = new ServiceFactoryImpl();
@@ -59,9 +65,9 @@ public class ItemsCommandGET implements Command {
         BrandService brandService = factory.getBrandService();
 
         try {
-            List<Integer> pages = itemService.getPages(categoryId, colorId, brandId);
+            List<Integer> pages = itemService.getPages(categoryId, colorId, brandId, priceFrom, priceTo);
             List<Item> itemList = itemService.findWithPaginationFilterAndSorting
-                    (page, categoryId, colorId, brandId, sortingId);
+                    (categoryId, colorId, brandId, priceFrom, priceTo, page, sorting);
             List<Category> categoryList = categoryService.findAll();
             List<Color> colorList = colorService.findAll();
             List<Brand> brandList = brandService.findAll();
@@ -70,11 +76,15 @@ public class ItemsCommandGET implements Command {
             request.setAttribute("category_id", categoryId);
             request.setAttribute("color_id", colorId);
             request.setAttribute("brand_id", brandId);
-            request.getSession().setAttribute("pages_item", pages);
-            request.getSession().setAttribute("items", itemList);
+            request.setAttribute("price_from", priceFrom);
+            request.setAttribute("price_to", priceTo);
+            request.setAttribute("sorting", sorting);
+
             request.getSession().setAttribute("category_list", categoryList);
             request.getSession().setAttribute("color_list", colorList);
             request.getSession().setAttribute("brand_list", brandList);
+            request.getSession().setAttribute("items", itemList);
+            request.getSession().setAttribute("pages_item", pages);
             return new Page(PathPageManager.getProperty("page.items")).setDispatchType(Page.DispatchType.FORWARD);
         } catch (ServiceException e) {
             return new Page(Page.WebPath.HOME.getPath()).setDispatchType(Page.DispatchType.FORWARD);

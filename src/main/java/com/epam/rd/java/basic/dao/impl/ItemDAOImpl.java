@@ -146,52 +146,36 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public Integer getCountRows(Integer categoryId, Integer colorId, Integer brandId) throws DaoException {
+    public Integer getCountRows(String categoryId, String colorId, String brandId, String priceFrom, String priceTo) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
+
             StringBuilder query = new StringBuilder();
             query.append(QueryConstants.ITEM_DETAILS.GET_COUNT_ROWS);
-            int count = 0;
 
-            if (nonNull(categoryId) || nonNull(colorId) || nonNull(brandId)) {
-                query.append("WHERE ");
+            if (!categoryId.equals("0")) {
+                query.append("AND id.category_id = ? ");
             }
-
-            if (nonNull(categoryId)) {
-                query.append("i.category_id = ? ");
-                count++;
+            if (!brandId.equals("0")) {
+                query.append("AND id.brand_id = ? ");
             }
-            if (nonNull(colorId)) {
-                if (count != 0) {
-                    query.append("AND ");
-                }
-                query.append("i.color_id = ? ");
-                count++;
-            }
-            if (nonNull(brandId)) {
-                if (count != 0) {
-                    query.append("AND ");
-                }
-                query.append("i.brand_id = ? ");
-                count++;
+            if (!colorId.equals("0")) {
+                query.append("AND id.color_id = ? ");
             }
 
             preparedStatement = connection.prepareStatement(query.toString());
-
-            if (nonNull(categoryId)) {
-                preparedStatement.setInt(1, categoryId);
+            int k = 0;
+            preparedStatement.setString(++k, priceFrom);
+            preparedStatement.setString(++k, priceTo);
+            if (!categoryId.equals("0")) {
+                preparedStatement.setString(++k, categoryId);
             }
-            if (nonNull(colorId)) {
-                if (isNull(categoryId)) {
-                    preparedStatement.setInt(1, colorId);
-                }
-                if (nonNull(categoryId)) {
-                    preparedStatement.setInt(2, colorId);
-                }
+            if (!brandId.equals("0")) {
+                preparedStatement.setString(++k, brandId);
             }
-            if (nonNull(brandId)) {
-                preparedStatement.setInt(count, brandId);
+            if (!colorId.equals("0")) {
+                preparedStatement.setString(++k, colorId);
             }
 
             resultSet = preparedStatement.executeQuery();
@@ -208,77 +192,78 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public List<Item> findWithPaginationFilterAndSorting(Integer page, Integer categoryId, Integer colorId, Integer brandId, String sortingId) throws DaoException {
+    public List<Item> findWithPaginationFilterAndSorting(String categoryId, String colorId, String brandId, String priceFrom, String priceTo, String page, String sorting) throws DaoException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         try {
             Integer start;
-            if (page == 1) {
+            if (Integer.parseInt(page) == 1) {
                 start = 0;
             } else {
-                start = (page - 1) * 10;
+                start = (Integer.parseInt(page) - 1) * 10;
             }
+
             List<Item> resultList = new ArrayList<>();
             StringBuilder query = new StringBuilder();
             query.append(QueryConstants.ITEM.FIND_ALL_WITH_FILTER);
-            int count = 0;
 
-            if (nonNull(categoryId) || nonNull(colorId) || nonNull(brandId)) {
-                query.append("WHERE ");
+            if (!categoryId.equals("0")) {
+                query.append("AND id.category_id = ? ");
+            }
+            if (!colorId.equals("0")) {
+                query.append("AND id.color_id = ? ");
+            }
+            if (!brandId.equals("0")) {
+                query.append("AND id.brand_id = ? ");
             }
 
-            if (nonNull(categoryId)) {
-                query.append("i.category_id = ? ");
-                count++;
-            }
-            if (nonNull(colorId)) {
-                if (count != 0) {
-                    query.append("AND ");
+            switch (sorting) {
+                case ("0"): {
+                    query.append("ORDER BY i.create_time ");
+                    break;
                 }
-                query.append("i.color_id = ? ");
-                count++;
-            }
-            if (nonNull(brandId)) {
-                if (count != 0) {
-                    query.append("AND ");
+                case ("1"): {
+                    query.append("ORDER BY i.create_time DESC ");
+                    break;
                 }
-                query.append("i.brand_id = ? ");
-                count++;
+                case ("2"): {
+                    query.append("ORDER BY i.name ");
+                    break;
+                }
+                case ("3"): {
+                    query.append("ORDER BY i.name DESC ");
+                    break;
+                }
+                case ("4"): {
+                    query.append("ORDER BY i.price ");
+                    break;
+                }
+                case ("5"): {
+                    query.append("ORDER BY i.price DESC ");
+                    break;
+                }
+                default: {
+                    query.append("ORDER BY i.create_time DESC ");
+                }
             }
+
             query.append("LIMIT ?, ?");
             preparedStatement = connection.prepareStatement(query.toString());
+            int k = 0;
+            preparedStatement.setString(++k, priceFrom);
+            preparedStatement.setString(++k, priceTo);
+            if (!categoryId.equals("0")) {
+                preparedStatement.setString(++k, categoryId);
+            }
+            if (!colorId.equals("0")) {
+                preparedStatement.setString(++k, colorId);
+            }
+            if (!brandId.equals("0")) {
+                preparedStatement.setString(++k, brandId);
+            }
+            preparedStatement.setInt(++k, start);
+            preparedStatement.setInt(++k, 10);
 
-            if (nonNull(categoryId)) {
-                preparedStatement.setInt(1, categoryId);
-            }
-            if (nonNull(colorId)) {
-                if (isNull(categoryId)) {
-                    preparedStatement.setInt(1, colorId);
-                }
-                if (nonNull(categoryId)) {
-                    preparedStatement.setInt(2, colorId);
-                }
-            }
-            if (nonNull(brandId)) {
-                preparedStatement.setInt(count, brandId);
-            }
-
-            if (count == 0){
-                preparedStatement.setInt(1, start);
-                preparedStatement.setInt(2, 10);
-            }
-            if (count == 1){
-                preparedStatement.setInt(2, start);
-                preparedStatement.setInt(3, 10);
-            }
-            if (count == 2){
-                preparedStatement.setInt(3, start);
-                preparedStatement.setInt(4, 10);
-            }
-            if (count == 3){
-                preparedStatement.setInt(4, start);
-                preparedStatement.setInt(5, 10);
-            }
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Item result = getFromResultSet(resultSet);

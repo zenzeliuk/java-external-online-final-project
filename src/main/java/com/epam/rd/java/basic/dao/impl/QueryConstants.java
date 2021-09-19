@@ -28,11 +28,28 @@ public class QueryConstants {
         public static final String FIND_ALL_BY_USER_ID = "" +
                 "SELECT c.id          AS id, " +
                 "       s.name        AS status, " +
+                "       s.name        AS user_name, " +
                 "       c.create_time AS create_time, " +
                 "       c.update_time AS update_time " +
                 "FROM shop.cart AS c " +
                 "         JOIN status s on s.id = c.status_id " +
                 "WHERE c.user_id = ? ";
+        public static final String GET_COUNT_ROWS = "" +
+                "SELECT COUNT(*) " +
+                "FROM shop.cart " +
+                "WHERE shop.cart.create_time " +
+                "BETWEEN TIMESTAMP(?) AND TIMESTAMP(?) ";
+        public static final String FIND_ALL_WITH_FILTER = "" +
+                "SELECT c.id          AS id, " +
+                "       s.name        AS status, " +
+                "       c.create_time AS create_time, " +
+                "       c.update_time AS update_time, " +
+                "       u.login       AS user_name " +
+                "FROM shop.cart AS c " +
+                "         LEFT JOIN user u on u.id = c.user_id " +
+                "         LEFT JOIN status s on s.id = c.status_id " +
+                "WHERE c.create_time " +
+                "    BETWEEN TIMESTAMP(?) AND TIMESTAMP(?)";
     }
 
     public static class CART_ITEM {
@@ -78,15 +95,21 @@ public class QueryConstants {
                 "    shop.item.price       = ? " +
                 "WHERE shop.item.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.item WHERE shop.item.id = ?";
-        public static final String FIND_ALL_WITH_FILTER = "SELECT * " +
-                "FROM shop.item " +
-                "JOIN item_details i on item.id = i.item_id ";
+        public static final String FIND_ALL_WITH_FILTER = "" +
+                "SELECT * " +
+                "FROM shop.item AS i " +
+                "         JOIN item_details id on i.id = id.item_id " +
+                "WHERE i.price " +
+                "    BETWEEN (?) AND (?) ";
     }
 
     public static class ITEM_DETAILS {
-        public static final String GET_COUNT_ROWS = "SELECT COUNT(*) " +
-                "FROM shop.item " +
-                "JOIN item_details i on item.id = i.item_id ";
+        public static final String GET_COUNT_ROWS = "" +
+                "SELECT COUNT(*) " +
+                "FROM shop.item AS i " +
+                "         JOIN item_details id on i.id = id.item_id " +
+                "WHERE i.price " +
+                "    BETWEEN (?) AND (?) ";
     }
 
     public static class ROLE {
