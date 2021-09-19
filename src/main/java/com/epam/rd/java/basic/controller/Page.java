@@ -34,11 +34,13 @@ public class Page {
     public enum WebPath {
 
         HOME("/"),
+        ADMIN_HOME("/admin/home"),
         ITEMS("/app/item?page=1"),
         LOGIN("/login/sign-in"),
         CART("/app/cart"),
         USERS("/admin/users?page=1"),
-        CARTS("/admin/carts");
+        CARTS("/admin/carts"),
+        CREATE_ITEM("/admin/create-item");
 
         private final String path;
 

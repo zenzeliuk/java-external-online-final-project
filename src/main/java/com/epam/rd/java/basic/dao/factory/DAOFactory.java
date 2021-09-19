@@ -12,6 +12,7 @@ public interface DAOFactory {
     CategoryDAO getCategoryDAO(Connection connection);
     ColorDAO getColorDAO(Connection connection);
     ItemDAO getItemDAO(Connection connection);
+    ItemDetailsDAO getItemDetailsDAO(Connection connection);
     RoleDAO getRoleDAO(Connection connection);
     StatusDAO getStatusDAO(Connection connection);
     UserDAO getUserDAO(Connection connection);

@@ -14,7 +14,7 @@
             <a href="${pageContext.request.contextPath}/admin/carts">
                 <fmt:message key="msg.admin-carts"/>
             </a>
-            <a href="${pageContext.request.contextPath}/admin/add-create-item">
+            <a href="${pageContext.request.contextPath}/admin/create-item">
                 <fmt:message key="msg.admin-create-item"/>
             </a>
             <a href="${pageContext.request.contextPath}/app/item">

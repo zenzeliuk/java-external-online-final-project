@@ -121,6 +121,41 @@ public enum ActionCommandEnum {
             this.command = new ChangeStatusCartPOST();
         }
     },
+
+    @Action(url = "/admin/create-item", method = "GET")
+    CREATE_ITEM_GET {
+        {
+            this.command = new CreateItemCommandGET();
+        }
+    },
+
+    @Action(url = "/admin/create-item", method = "POST")
+    CREATE_ITEM_POST {
+        {
+            this.command = new CreateItemCommandPOST();
+        }
+    },
+    @Action(url = "/admin/create-category", method = "POST")
+    CREATE_CATEGORY {
+        {
+            this.command = new CreateCategoryCommandPOST();
+        }
+    },
+
+    @Action(url = "/admin/create-brand", method = "POST")
+    CREATE_BRAND {
+        {
+            this.command = new CreateBrandCommandPOST();
+        }
+    },
+
+    @Action(url = "/admin/create-color", method = "POST")
+    CREATE_COLOR {
+        {
+            this.command = new CreateColorCommandPOST();
+        }
+    },
+
     ;
 
     Command command;

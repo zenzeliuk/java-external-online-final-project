@@ -39,6 +39,11 @@ public class DAOFactoryImpl implements DAOFactory {
     }
 
     @Override
+    public ItemDetailsDAO getItemDetailsDAO(Connection connection) {
+        return new ItemDetailsDAOImpl(connection);
+    }
+
+    @Override
     public RoleDAO getRoleDAO(Connection connection) {
         return new RoleDAOImpl(connection);
     }

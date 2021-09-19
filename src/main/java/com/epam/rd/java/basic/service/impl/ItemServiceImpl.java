@@ -1,16 +1,14 @@
 package com.epam.rd.java.basic.service.impl;
 
 import com.epam.rd.java.basic.dao.ItemDAO;
+import com.epam.rd.java.basic.dao.ItemDetailsDAO;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
-import com.epam.rd.java.basic.model.Item;
-import com.epam.rd.java.basic.model.Role;
-import com.epam.rd.java.basic.model.User;
-import com.epam.rd.java.basic.model.UserDetails;
+import com.epam.rd.java.basic.model.*;
 import com.epam.rd.java.basic.model.mapper.UserMapper;
 import com.epam.rd.java.basic.service.ItemService;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +21,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final DAOFactory daoFactory;
     private ItemDAO itemDAO;
+    private ItemDetailsDAO itemDetailsDAO;
 
     public ItemServiceImpl() {
         daoFactory = new DAOFactoryImpl();
@@ -153,6 +152,27 @@ public class ItemServiceImpl implements ItemService {
             String exception = "Cannot find item with filter. " + e.getMessage();
             log.error(exception);
             throw new ServiceException(exception);
+        }
+    }
+
+    @Override
+    public void createItemWithDetails(Item item, ItemDetails itemDetails) throws ServiceException {
+        DBConnection dbConnection = new ConnectionImpl();
+        try {
+            dbConnection.autoCommit(false);
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            itemDetailsDAO = daoFactory.getItemDetailsDAO(dbConnection.getConnection());
+            int itemId = itemDAO.create(item);
+            itemDetails.setId(itemId);
+            itemDetailsDAO.create(itemDetails);
+            dbConnection.commit();
+        } catch (DaoException e) {
+            String exception = "Cannot create item with details. " + item.toString() + e.getMessage();
+            log.error(exception);
+            dbConnection.rollback();
+            throw new ServiceException(exception);
+        } finally {
+            dbConnection.close();
         }
     }
 }

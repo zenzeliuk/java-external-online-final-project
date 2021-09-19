@@ -110,6 +110,9 @@ public class QueryConstants {
                 "         JOIN item_details id on i.id = id.item_id " +
                 "WHERE i.price " +
                 "    BETWEEN (?) AND (?) ";
+        public static final String CREATE = "" +
+                "INSERT INTO shop.item_details (item_id, category_id, brand_id, color_id) " +
+                "VALUES (?, ?, ?, ?)";
     }
 
     public static class ROLE {

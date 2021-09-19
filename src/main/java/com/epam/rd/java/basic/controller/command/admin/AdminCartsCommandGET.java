@@ -4,7 +4,6 @@ import com.epam.rd.java.basic.controller.Command;
 import com.epam.rd.java.basic.controller.Page;
 import com.epam.rd.java.basic.controller.util.PathPageManager;
 import com.epam.rd.java.basic.exception.ServiceException;
-import com.epam.rd.java.basic.model.Cart;
 import com.epam.rd.java.basic.model.Status;
 import com.epam.rd.java.basic.model.dto.CartDTO;
 import com.epam.rd.java.basic.service.CartService;
@@ -14,7 +13,6 @@ import com.epam.rd.java.basic.service.factory.impl.ServiceFactoryImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdminCartsCommandGET implements Command {
@@ -37,7 +35,7 @@ public class AdminCartsCommandGET implements Command {
         if (status == null) {
             status = "0";
         }
-        if (sorting == null){
+        if (sorting == null) {
             sorting = "2";
         }
 

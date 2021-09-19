@@ -32,7 +32,6 @@
                 </select>
 
                 <label for="color"><fmt:message key="msg.color"/></label>
-
                 <select name="color_id" id="color">
                     <option value="0"><fmt:message key="msg.all"/></option>
                     <c:forEach items="${sessionScope.color_list}" var="color">

@@ -3,13 +3,11 @@ package com.epam.rd.java.basic.controller.command.item;
 import com.epam.rd.java.basic.controller.Command;
 import com.epam.rd.java.basic.controller.Page;
 import com.epam.rd.java.basic.controller.util.PathPageManager;
-import com.epam.rd.java.basic.controller.util.Sorting;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Brand;
 import com.epam.rd.java.basic.model.Category;
 import com.epam.rd.java.basic.model.Color;
 import com.epam.rd.java.basic.model.Item;
-import com.epam.rd.java.basic.model.dto.ItemDTO;
 import com.epam.rd.java.basic.service.BrandService;
 import com.epam.rd.java.basic.service.CategoryService;
 import com.epam.rd.java.basic.service.ColorService;
@@ -20,8 +18,6 @@ import com.epam.rd.java.basic.service.factory.impl.ServiceFactoryImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-
-import static java.util.Objects.nonNull;
 
 public class ItemsCommandGET implements Command {
 
