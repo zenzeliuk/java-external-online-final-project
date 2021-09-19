@@ -21,6 +21,7 @@ public class AddItemToCartCommandPOST implements Command {
     public Page execute(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession();
+
         int itemId = Integer.parseInt(request.getParameter("item_id"));
         Cart cart = (Cart) session.getAttribute("cart");
 

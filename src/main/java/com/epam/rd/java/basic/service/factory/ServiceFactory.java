@@ -13,5 +13,6 @@ public interface ServiceFactory {
     UserDetailsService getUserDetailsService();
     UserService getUserService();
     ColorService getColorService();
+    BrandService getBrandService();
 
 }

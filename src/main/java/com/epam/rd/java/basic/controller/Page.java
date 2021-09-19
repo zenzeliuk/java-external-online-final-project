@@ -34,9 +34,10 @@ public class Page {
     public enum WebPath {
 
         HOME("/"),
-        ITEMS("/app/item"),
+        ITEMS("/app/item?page=1"),
         LOGIN("/login/sign-in"),
-        CART("/app/cart");
+        CART("/app/cart"),
+        USERS("/admin/users?page=1");
 
         private final String path;
 

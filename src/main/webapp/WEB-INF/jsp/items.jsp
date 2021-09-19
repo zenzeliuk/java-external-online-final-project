@@ -8,30 +8,40 @@
     <t:page>
         <jsp:body>
 
-            <div>
-                <form action="filter-item" method="GET">
-                    <label for="category"><fmt:message key="msg.category"/></label>
-                    <select class="form-control" id="category" required="true" name="category_id">
-                        <option value="0"><fmt:message key="msg.all-category"/></option>
-                        <c:forEach items="${sessionScope.category_list}" var="category">
-                            <option value="${category.id}">
-                                    ${category.name}
-                            </option>
+            <div class="container">
+                <div class="paginate" style="width:600px">
+                    <ul class="pagination">
+                        <c:forEach items="${sessionScope.pages_item}" var="page">
+                            <li>
+                                <a href="${pageContext.request.contextPath}?page=${page}">
+                                        ${page}
+                                </a>
+                            </li>
                         </c:forEach>
-                    </select>
-                    <label for="color"><fmt:message key="msg.color"/></label>
-                    <select class="form-control" id="color" required="true" name="color_id">
-                        <option value="0"><fmt:message key="msg.all-color"/></option>
-                        <c:forEach items="${sessionScope.color_list}" var="color">
-                            <option value="${color.id}">
-                                    ${color.name}
-                            </option>
-                        </c:forEach>
-                    </select>
-                    <input type="submit" value="Submit"/>
-                </form>
+                    </ul>
+                </div>
             </div>
 
+
+            <form action="item" method="GET">
+                <fmt:message key="msg.category"/>
+                <c:forEach items="${sessionScope.category_list}" var="category">
+                    <input type="checkbox" name="category_id" value="${category.id}">${category.name}
+                </c:forEach>
+                <br/>
+                <fmt:message key="msg.brand"/>
+                <c:forEach items="${sessionScope.brand_list}" var="brand">
+                    <input type="checkbox" name="brand_id" value="${brand.id}">${brand.name}
+                </c:forEach>
+                <br/>
+                <fmt:message key="msg.color"/>
+                <c:forEach items="${sessionScope.color_list}" var="color">
+                    <input type="checkbox" name="color_id" value="${color.id}">${color.name}
+                </c:forEach>
+                <input type="text" name="page" value="1" hidden>
+                <br/>
+                <button type="submit">Submit</button>
+            </form>
 
             <div class="container d-flex justify-content-center mt-50 mb-50">
                 <div class="row">
@@ -52,7 +62,6 @@
                                         <a class="text-muted" data-abc="true">Description</a>
                                     </div>
                                     <h3 class="mb-0 font-weight-semibold">${item.price} UAH</h3>
-
                                     <c:if test='${!fn:contains(sessionScope.cartitem, item.id)}'>
                                         <form action="add-to-cart" method="POST">
                                             <input type="text" name="item_id" value="${item.id}" hidden>
@@ -65,8 +74,6 @@
                             </div>
                         </div>
                     </c:forEach>
-
-
                 </div>
             </div>
 

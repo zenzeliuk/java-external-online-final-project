@@ -8,9 +8,14 @@ import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
 import com.epam.rd.java.basic.model.Item;
+import com.epam.rd.java.basic.model.Role;
+import com.epam.rd.java.basic.model.User;
+import com.epam.rd.java.basic.model.UserDetails;
+import com.epam.rd.java.basic.model.mapper.UserMapper;
 import com.epam.rd.java.basic.service.ItemService;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -110,6 +115,44 @@ public class ItemServiceImpl implements ItemService {
             throw new ServiceException(exception);
         } finally {
             dbConnection.close();
+        }
+    }
+
+
+    @Override
+    public List<Integer> getPages(Integer categoryId, Integer colorId, Integer brandId) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            List<Integer> pages = new ArrayList<>();
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            Integer countRows = itemDAO.getCountRows(categoryId, colorId, brandId);
+            if (countRows != null) {
+                int p = (countRows / 10) + 1;
+                for (int i = 1; i <= p; i++) {
+                    pages.add(i);
+                }
+            }
+            return pages;
+        } catch (DaoException e) {
+            String exception = "Cannot get count rows. " + e.getMessage();
+            log.error(exception);
+            throw new ServiceException(exception);
+        }
+    }
+
+    @Override
+    public List<Item> findWithPaginationFilterAndSorting
+            (Integer page, Integer categoryId, Integer colorId, Integer brandId, String sortingId)
+            throws ServiceException {
+
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            itemDAO = daoFactory.getItemDAO(dbConnection.getConnection());
+            return itemDAO.findWithPaginationFilterAndSorting(
+                    page, categoryId, colorId, brandId, sortingId
+            );
+        } catch (DaoException e) {
+            String exception = "Cannot find item with filter. " + e.getMessage();
+            log.error(exception);
+            throw new ServiceException(exception);
         }
     }
 }

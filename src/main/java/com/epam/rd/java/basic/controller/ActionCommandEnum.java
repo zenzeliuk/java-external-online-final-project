@@ -1,8 +1,10 @@
 package com.epam.rd.java.basic.controller;
 
 import com.epam.rd.java.basic.controller.annotations.Action;
+import com.epam.rd.java.basic.controller.command.admin.AdminCartsCommandGET;
 import com.epam.rd.java.basic.controller.command.admin.AdminHomeCommandGET;
 import com.epam.rd.java.basic.controller.command.admin.AdminUsersCommandGET;
+import com.epam.rd.java.basic.controller.command.admin.ChangeRoleCommandGET;
 import com.epam.rd.java.basic.controller.command.auth.*;
 import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
@@ -104,6 +106,7 @@ public enum ActionCommandEnum {
         }
     },
 
+    //todo
     @Action(url = "/app/filter-item", method = "GET")
     CATEGORY_FILTER {
         {
@@ -111,7 +114,19 @@ public enum ActionCommandEnum {
         }
     },
 
+    @Action(url = "/admin/change-role", method = "GET")
+    CHANGE_ROLE {
+        {
+            this.command = new ChangeRoleCommandGET();
+        }
+    },
 
+    @Action(url = "/admin/carts", method = "GET")
+    CARTS {
+        {
+            this.command = new AdminCartsCommandGET();
+        }
+    },
     ;
 
     Command command;

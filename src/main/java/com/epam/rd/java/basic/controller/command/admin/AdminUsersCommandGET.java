@@ -46,6 +46,7 @@ public class AdminUsersCommandGET implements Command {
             e.printStackTrace();
         }
 
+
         request.getSession().setAttribute("pages", pages);
         request.getSession().setAttribute("user_list", userListDTO);
         return new Page(PathPageManager.getProperty("page.admin-users")).setDispatchType(Page.DispatchType.FORWARD);

@@ -51,13 +51,13 @@
                                 </td>
                             </c:when>
                             <c:otherwise>
-                                <form action="change-role" method="POST">
+                                <form action="change-role" method="GET">
                                     <input type="text" name="user_id" value="${user.idUser}" hidden>
                                     <c:if test="${user.roleName == USER}">
                                         <td headers="role">
                                             <fmt:message key="msg.unblock"/>
                                         </td>
-                                        <td headers="changestatus">
+                                        <td headers="changerole">
                                             <button type="submit">
                                                 <fmt:message key="msg.do-block"/>
                                             </button>
@@ -68,7 +68,7 @@
                                         <td headers="role">
                                             <fmt:message key="msg.block"/>
                                         </td>
-                                        <td headers="changestatus">
+                                        <td headers="changerole">
                                             <button type="submit">
                                                 <fmt:message key="msg.do-unblock"/>
                                             </button>

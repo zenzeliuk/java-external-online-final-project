@@ -51,4 +51,9 @@ public class ServiceFactoryImpl implements ServiceFactory {
     public ColorService getColorService() {
         return new ColorServiceImpl();
     }
+
+    @Override
+    public BrandService getBrandService() {
+        return new BrandServiceImpl();
+    }
 }

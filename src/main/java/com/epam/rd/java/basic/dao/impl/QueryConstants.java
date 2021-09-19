@@ -51,7 +51,9 @@ public class QueryConstants {
         public static final String DELETE_BY_ID = "DELETE FROM shop.cart_item WHERE shop.cart_item.id = ?";
         public static final String FIND_ALL_BY_CART_ID = FIND_ALL + " WHERE shop.cart_item.card_id = ?";
     }
-
+    public static class BRAND {
+        public static final String FIND_ALL = "SELECT * FROM shop.brand";
+    }
     public static class CATEGORY {
         public static final String FIND_ALL = "SELECT * FROM shop.category";
         public static final String CREATE = "INSERT INTO shop.category (name) VALUES (?)";
@@ -76,6 +78,15 @@ public class QueryConstants {
                 "    shop.item.price       = ? " +
                 "WHERE shop.item.id = ?";
         public static final String DELETE_BY_ID = "DELETE FROM shop.item WHERE shop.item.id = ?";
+        public static final String FIND_ALL_WITH_FILTER = "SELECT * " +
+                "FROM shop.item " +
+                "JOIN item_details i on item.id = i.item_id ";
+    }
+
+    public static class ITEM_DETAILS {
+        public static final String GET_COUNT_ROWS = "SELECT COUNT(*) " +
+                "FROM shop.item " +
+                "JOIN item_details i on item.id = i.item_id ";
     }
 
     public static class ROLE {
@@ -138,4 +149,6 @@ public class QueryConstants {
     public static class COLOR {
         public static final String FIND_ALL = "SELECT * FROM shop.color";
     }
+
+
 }

@@ -11,6 +11,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 @Log4j2
 public class ItemDAOImpl implements ItemDAO {
 
@@ -56,7 +59,6 @@ public class ItemDAOImpl implements ItemDAO {
                 .updateTime(resultSet.getTimestamp("update_time"))
                 .build();
     }
-
 
     @Override
     public int create(Item item) throws DaoException {
@@ -141,5 +143,158 @@ public class ItemDAOImpl implements ItemDAO {
         } finally {
             close.closePrepareStatement(preparedStatement);
         }
+    }
+
+    @Override
+    public Integer getCountRows(Integer categoryId, Integer colorId, Integer brandId) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            StringBuilder query = new StringBuilder();
+            query.append(QueryConstants.ITEM_DETAILS.GET_COUNT_ROWS);
+            int count = 0;
+
+            if (nonNull(categoryId) || nonNull(colorId) || nonNull(brandId)) {
+                query.append("WHERE ");
+            }
+
+            if (nonNull(categoryId)) {
+                query.append("i.category_id = ? ");
+                count++;
+            }
+            if (nonNull(colorId)) {
+                if (count != 0) {
+                    query.append("AND ");
+                }
+                query.append("i.color_id = ? ");
+                count++;
+            }
+            if (nonNull(brandId)) {
+                if (count != 0) {
+                    query.append("AND ");
+                }
+                query.append("i.brand_id = ? ");
+                count++;
+            }
+
+            preparedStatement = connection.prepareStatement(query.toString());
+
+            if (nonNull(categoryId)) {
+                preparedStatement.setInt(1, categoryId);
+            }
+            if (nonNull(colorId)) {
+                if (isNull(categoryId)) {
+                    preparedStatement.setInt(1, colorId);
+                }
+                if (nonNull(categoryId)) {
+                    preparedStatement.setInt(2, colorId);
+                }
+            }
+            if (nonNull(brandId)) {
+                preparedStatement.setInt(count, brandId);
+            }
+
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("COUNT(*)");
+        } catch (SQLException e) {
+            String exception = "Cannot get count rows. " + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+    }
+
+    @Override
+    public List<Item> findWithPaginationFilterAndSorting(Integer page, Integer categoryId, Integer colorId, Integer brandId, String sortingId) throws DaoException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            Integer start;
+            if (page == 1) {
+                start = 0;
+            } else {
+                start = (page - 1) * 10;
+            }
+            List<Item> resultList = new ArrayList<>();
+            StringBuilder query = new StringBuilder();
+            query.append(QueryConstants.ITEM.FIND_ALL_WITH_FILTER);
+            int count = 0;
+
+            if (nonNull(categoryId) || nonNull(colorId) || nonNull(brandId)) {
+                query.append("WHERE ");
+            }
+
+            if (nonNull(categoryId)) {
+                query.append("i.category_id = ? ");
+                count++;
+            }
+            if (nonNull(colorId)) {
+                if (count != 0) {
+                    query.append("AND ");
+                }
+                query.append("i.color_id = ? ");
+                count++;
+            }
+            if (nonNull(brandId)) {
+                if (count != 0) {
+                    query.append("AND ");
+                }
+                query.append("i.brand_id = ? ");
+                count++;
+            }
+            query.append("LIMIT ?, ?");
+            preparedStatement = connection.prepareStatement(query.toString());
+
+            if (nonNull(categoryId)) {
+                preparedStatement.setInt(1, categoryId);
+            }
+            if (nonNull(colorId)) {
+                if (isNull(categoryId)) {
+                    preparedStatement.setInt(1, colorId);
+                }
+                if (nonNull(categoryId)) {
+                    preparedStatement.setInt(2, colorId);
+                }
+            }
+            if (nonNull(brandId)) {
+                preparedStatement.setInt(count, brandId);
+            }
+
+            if (count == 0){
+                preparedStatement.setInt(1, start);
+                preparedStatement.setInt(2, 10);
+            }
+            if (count == 1){
+                preparedStatement.setInt(2, start);
+                preparedStatement.setInt(3, 10);
+            }
+            if (count == 2){
+                preparedStatement.setInt(3, start);
+                preparedStatement.setInt(4, 10);
+            }
+            if (count == 3){
+                preparedStatement.setInt(4, start);
+                preparedStatement.setInt(5, 10);
+            }
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Item result = getFromResultSet(resultSet);
+                resultList.add(result);
+            }
+            return resultList;
+
+        } catch (SQLException e) {
+            String exception = "Cannot find item with filter. " + e.getMessage();
+            log.error(exception);
+            throw new DaoException(exception);
+        } finally {
+            close.closeResultSet(resultSet);
+            close.closePrepareStatement(preparedStatement);
+        }
+
+
     }
 }

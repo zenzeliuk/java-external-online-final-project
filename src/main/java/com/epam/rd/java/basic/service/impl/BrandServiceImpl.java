@@ -1,52 +1,52 @@
 package com.epam.rd.java.basic.service.impl;
 
-import com.epam.rd.java.basic.dao.ColorDAO;
+import com.epam.rd.java.basic.dao.BrandDAO;
 import com.epam.rd.java.basic.dao.connection.DBConnection;
 import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.factory.impl.DAOFactoryImpl;
 import com.epam.rd.java.basic.exception.DaoException;
 import com.epam.rd.java.basic.exception.ServiceException;
-import com.epam.rd.java.basic.model.Color;
-import com.epam.rd.java.basic.service.ColorService;
+import com.epam.rd.java.basic.model.Brand;
+import com.epam.rd.java.basic.service.BrandService;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
 @Log4j2
-public class ColorServiceImpl implements ColorService {
+public class BrandServiceImpl implements BrandService {
 
     private final DAOFactory daoFactory;
-    private ColorDAO colorDAO;
+    private BrandDAO brandDAO;
 
-    public ColorServiceImpl() {
+    public BrandServiceImpl() {
         daoFactory = new DAOFactoryImpl();
     }
 
     @Override
-    public List<Color> findAll() throws ServiceException {
+    public List<Brand> findAll() throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            colorDAO = daoFactory.getColorDAO(dbConnection.getConnection());
-            return colorDAO.findAll();
+            brandDAO = daoFactory.getBrandDAO(dbConnection.getConnection());
+            return brandDAO.findAll();
         } catch (DaoException e) {
-            String exception = "Cannot find all color. " + e.getMessage();
+            String exception = "Cannot find all brand. " + e.getMessage();
             log.error(exception);
             throw new ServiceException(exception);
         }
     }
 
     @Override
-    public Color create(Color color) throws ServiceException {
+    public Brand create(Brand brand) throws ServiceException {
         return null;
     }
 
     @Override
-    public Color get(int id) throws ServiceException {
+    public Brand get(int id) throws ServiceException {
         return null;
     }
 
     @Override
-    public boolean update(Color color) throws ServiceException {
+    public boolean update(Brand brand) throws ServiceException {
         return false;
     }
 
