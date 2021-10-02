@@ -5,9 +5,11 @@ import com.epam.rd.java.basic.controller.command.admin.*;
 import com.epam.rd.java.basic.controller.command.auth.*;
 import com.epam.rd.java.basic.controller.command.cart.CartCommandGET;
 import com.epam.rd.java.basic.controller.command.cart.ConfirmCartCommandPOST;
+import com.epam.rd.java.basic.controller.command.cart.DeleteItemFromCartPOST;
 import com.epam.rd.java.basic.controller.command.cart.EditCountItemCommandGET;
 import com.epam.rd.java.basic.controller.command.item.AddItemToCartCommandPOST;
 import com.epam.rd.java.basic.controller.command.item.ItemsCommandGET;
+import com.epam.rd.java.basic.controller.command.user.ShowCartGET;
 import com.epam.rd.java.basic.controller.command.user.UserHomeCommandGET;
 
 public enum ActionCommandEnum {
@@ -156,6 +158,19 @@ public enum ActionCommandEnum {
         }
     },
 
+    @Action(url = "/app/delete-cart-item", method = "POST")
+    DELETE_ITEM_FROM_CART {
+        {
+            this.command = new DeleteItemFromCartPOST();
+        }
+    },
+
+    @Action(url = "/user/show-cart", method = "GET")
+    SHOW_COMMAND {
+        {
+            this.command = new ShowCartGET();
+        }
+    },
     ;
 
     Command command;

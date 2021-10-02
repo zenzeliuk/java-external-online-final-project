@@ -14,20 +14,3 @@ public class CartItemMapper {
                 .build();
     }
 }
-
-/*
-public static ItemDTO toItemDTO(Item item) {
-        return ItemDTO.builder()
-                .id(String.valueOf(item.getId()))
-                .name(item.getName())
-                .price(String.valueOf(item.getPrice()))
-//                .description(item.getColorId())
-                .build();
-    }
-
-    public static List<ItemDTO> toItemDTOList(List<Item> itemList) {
-        return itemList.stream()
-                .map(ItemMapper::toItemDTO)
-                .collect(Collectors.toList());
-    }
- */

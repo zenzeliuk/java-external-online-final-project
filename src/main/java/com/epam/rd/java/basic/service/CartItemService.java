@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CartItemService extends AbstractService<CartItem> {
     List<CartItem> findAllByCartId(int id) throws ServiceException;
+    void deleteCartItem(Integer cartItemId) throws ServiceException;
 }

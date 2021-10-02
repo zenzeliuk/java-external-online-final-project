@@ -10,7 +10,6 @@ public class User extends BaseEntity implements Serializable {
     private int roleId;
 
     public User() {
-        //POJO object
     }
 
     public static Builder builder() {

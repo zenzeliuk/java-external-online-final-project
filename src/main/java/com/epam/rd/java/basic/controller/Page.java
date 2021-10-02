@@ -4,8 +4,7 @@ import java.util.Objects;
 
 public class Page {
 
-    private String name;
-    private boolean isRedirect;
+    private final String name;
     private DispatchType dispatchType;
 
     public Page(String name) {
@@ -14,10 +13,6 @@ public class Page {
 
     public String getName() {
         return name;
-    }
-
-    public boolean isRedirect() {
-        return isRedirect;
     }
 
     public enum DispatchType {FORWARD, REDIRECT}

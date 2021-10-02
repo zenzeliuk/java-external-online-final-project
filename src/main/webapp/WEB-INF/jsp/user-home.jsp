@@ -24,7 +24,7 @@
                 <c:forEach items="${sessionScope.user_cart_list}" var="c">
                     <form action="show-cart" method="GET">
                         <tr>
-                            <input type="text" name="item_id" value="${c.id}" hidden>
+                            <input type="text" name="cartId" value="${c.id}" hidden>
                             <td headers="status">
                                 <c:choose>
                                     <c:when test="${c.statusName == OPEN}">

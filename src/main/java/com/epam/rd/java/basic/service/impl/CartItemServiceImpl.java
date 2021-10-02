@@ -124,4 +124,17 @@ public class CartItemServiceImpl implements CartItemService {
             throw new ServiceException(exception);
         }
     }
+
+    @Override
+    public void deleteCartItem(Integer cartItemId) throws ServiceException {
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            cartItemDAO = daoFactory.getCartItemDAO(dbConnection.getConnection());
+            cartItemDAO.delete(cartItemId);
+        } catch (DaoException e) {
+            String exception = String.format("Cannot delete cart_item by id = '%s'. %s", cartItemId, e.getMessage());
+            log.info(exception);
+            throw new ServiceException(exception);
+        }
+    }
+
 }

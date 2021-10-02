@@ -5,9 +5,9 @@ import java.util.Objects;
 
 public class ItemDetails extends BaseEntity implements Serializable {
 
-    Integer categoryId;
-    Integer brandId;
-    Integer colorId;
+    private Integer categoryId;
+    private Integer brandId;
+    private Integer colorId;
 
     public ItemDetails() {
     }
