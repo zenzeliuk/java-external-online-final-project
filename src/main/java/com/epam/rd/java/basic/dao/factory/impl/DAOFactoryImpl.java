@@ -10,13 +10,6 @@ import java.sql.Connection;
 
 public class DAOFactoryImpl implements DAOFactory {
 
-    private final DBConnection dbConnection = new ConnectionImpl();
-
-    @Override
-    public Connection getConnection() {
-        return dbConnection.getConnection();
-    }
-
     @Override
     public BrandDAO getBrandDAO(Connection connection) {
         return new BrandDAOImpl(connection);

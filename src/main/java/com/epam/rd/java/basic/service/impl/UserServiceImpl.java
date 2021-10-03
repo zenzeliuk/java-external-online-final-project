@@ -64,11 +64,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User get(int id) throws ServiceException {
-        try (Connection connection = daoFactory.getConnection()) {
-//        try (DBConnection dbConnection = new ConnectionImpl()) {
-            UserDAO userDAO = daoFactory.getUserDAO(connection);
+        try (DBConnection dbConnection = new ConnectionImpl()) {
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             return userDAO.get(id);
-        } catch (DaoException | SQLException e) {
+        } catch (DaoException e) {
             String exception = String.format("Cannot get user by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new ServiceException(exception);
