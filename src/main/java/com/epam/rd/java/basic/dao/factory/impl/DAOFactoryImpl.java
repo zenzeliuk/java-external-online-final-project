@@ -1,12 +1,21 @@
 package com.epam.rd.java.basic.dao.factory.impl;
 
 import com.epam.rd.java.basic.dao.*;
+import com.epam.rd.java.basic.dao.connection.DBConnection;
+import com.epam.rd.java.basic.dao.connection.impl.ConnectionImpl;
 import com.epam.rd.java.basic.dao.factory.DAOFactory;
 import com.epam.rd.java.basic.dao.impl.*;
 
 import java.sql.Connection;
 
 public class DAOFactoryImpl implements DAOFactory {
+
+    private final DBConnection dbConnection = new ConnectionImpl();
+
+    @Override
+    public Connection getConnection() {
+        return dbConnection.getConnection();
+    }
 
     @Override
     public BrandDAO getBrandDAO(Connection connection) {

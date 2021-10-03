@@ -17,15 +17,14 @@ import com.epam.rd.java.basic.model.mapper.UserMapper;
 import com.epam.rd.java.basic.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @Log4j2
 public class UserServiceImpl implements UserService {
 
-    private final DAOFactory daoFactory;
-    private UserDAO userDAO;
-    private RoleDAO roleDAO;
-    private UserDetailsDAO userDetailsDAO;
+    DAOFactory daoFactory;
 
     public UserServiceImpl() {
         daoFactory = new DAOFactoryImpl();
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             return userDAO.findAll();
         } catch (DaoException e) {
             String exception = "Cannot find all user. " + e.getMessage();
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             int id = userDAO.create(user);
             user.setId(id);
             dbConnection.commit();
@@ -65,10 +64,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User get(int id) throws ServiceException {
-        try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+        try (Connection connection = daoFactory.getConnection()) {
+//        try (DBConnection dbConnection = new ConnectionImpl()) {
+            UserDAO userDAO = daoFactory.getUserDAO(connection);
             return userDAO.get(id);
-        } catch (DaoException e) {
+        } catch (DaoException | SQLException e) {
             String exception = String.format("Cannot get user by id='%s'. %s", id, e.getMessage());
             log.error(exception);
             throw new ServiceException(exception);
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             if (userDAO.update(user)) {
                 dbConnection.commit();
                 return true;
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
         DBConnection dbConnection = new ConnectionImpl();
         try {
             dbConnection.autoCommit(false);
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             if (userDAO.delete(id)) {
                 dbConnection.commit();
                 return true;
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByLogin(String login) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             return userDAO.findByLogin(login);
         } catch (DaoException e) {
             String exception = String.format("Cannot find user by login='%s'. %s", login, e.getMessage());
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByLoginAndPassword(String login, String password) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             return userDAO.findByLoginAndPassword(login, password);
         } catch (DaoException e) {
             String exception = String.format("Cannot find user by login='%s'. %s", login, e.getMessage());
@@ -148,9 +148,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> findAllWithPaginationDTO(Integer start, Integer total) throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
-            roleDAO = daoFactory.getRoleDAO(dbConnection.getConnection());
-            userDetailsDAO = daoFactory.getUserDetailsDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            RoleDAO roleDAO = daoFactory.getRoleDAO(dbConnection.getConnection());
+            UserDetailsDAO userDetailsDAO = daoFactory.getUserDetailsDAO(dbConnection.getConnection());
             List<User> userList = userDAO.findAllWithPagination(start, total);
             List<UserDetails> userDetailsList = userDetailsDAO.findAll();
             List<Role> roleList = roleDAO.findAll();
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer getCountRows() throws ServiceException {
         try (DBConnection dbConnection = new ConnectionImpl()) {
-            userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
+            UserDAO userDAO = daoFactory.getUserDAO(dbConnection.getConnection());
             return userDAO.getCountRows();
         } catch (DaoException e) {
             String exception = "Cannot get count rows. " + e.getMessage();
